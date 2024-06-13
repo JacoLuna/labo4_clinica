@@ -1,0 +1,43 @@
+mat-vertical-stepper {
+  width: 50rem;
+  form {
+    display: flex;
+    flex-direction: column;
+
+    .buttons{
+      display: flex;
+      justify-content: space-between;
+    }
+    .input-pair-container {
+      display: flex;
+      justify-content: space-evenly;
+      width: 100%;
+      mat-form-field {
+        width: 40%;
+      }
+    }
+    .input-pair-container:first-child{
+      margin-top: .5rem;
+    }
+    #input-email {
+      mat-form-field {
+        width: 87%;
+      }
+    }
+    .btnPic{
+      display: flex;
+      align-self: center;
+      margin: 1rem 0;
+      width: 87%;
+    }
+    mat-card{
+      display: flex;
+      align-self: center;
+      max-width: 300px;
+      margin-bottom: 1rem;
+      #fotoPerfil{
+        width: 300px;
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+<div class="example-container">
+  <form [formGroup]="frmLogin">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        placeholder="carlosJuan@gmail.com"
+        [formControl]="correo"
+        (blur)="updateErrorMessage(correo)"
+        required
+      />
+      @if (correo.invalid) {
+      <mat-error>{{ emailErrorMessage }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        [type]="hide ? 'password' : 'text'"
+        placeholder="*******"
+        [formControl]="clave"
+        (blur)="updateErrorMessage(clave)"
+        required
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+      @if (clave.invalid) {
+      <mat-error>{{ claveErrorMessage }}</mat-error>
+      }
+    </mat-form-field>
+
+    <button mat-flat-button color="accent" (click)="login()">Ingresar</button>
+    <button mat-flat-button color="accent" (click)="admin()">Admin</button>
+  </form>
+</div>
