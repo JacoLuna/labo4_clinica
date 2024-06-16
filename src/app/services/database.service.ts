@@ -9,7 +9,7 @@ export enum Colecciones {
   Especialistas = 'especialistas',
   Personas = 'persona',
   Especialidades = 'especialidades',
-  // Encuestas = 'encuestas',
+  ObrasSociales = 'obrasSociales',
 }
 @Injectable({
   providedIn: 'root'

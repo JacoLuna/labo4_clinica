@@ -84,7 +84,6 @@ export class AuthService {
       }
 
       if (objUsuario) this.UsuarioEnSesion = objUsuario;
-      console.log(this.UsuarioEnSesion);
     } catch (error: any) {
       error.message = this.parsearError(error);
       throw error;

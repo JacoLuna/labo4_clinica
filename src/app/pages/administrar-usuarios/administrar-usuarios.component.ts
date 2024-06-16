@@ -61,7 +61,7 @@ export class AdministrarUsuariosComponent implements OnInit {
     this.db.traerColeccion<Persona>(Colecciones.Personas).then((r) => {
       r.forEach( p => {
         if(p.tipoUsuario != 'especialista'){
-          this.pacientes.push(p);
+          // this.pacientes.push(p);
         }
       })
     });

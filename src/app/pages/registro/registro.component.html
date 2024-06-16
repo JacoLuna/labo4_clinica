@@ -1,212 +1,99 @@
-<div>
-  <mat-icon (click)="fillFields()">workspaces</mat-icon>
-
-  <mat-vertical-stepper [linear]="true" #stepper [animationDuration]="duration">
-    <mat-step [stepControl]="frmRegister">
-      <form [formGroup]="frmRegister">
+<mat-tab-group dynamicHeight selectedIndex="0">
+  <mat-tab label="Paciente">
+    <mat-vertical-stepper 
+      [linear]="true"
+      #stepperPaciente
+      [animationDuration]="duration"
+    >
+      <mat-step *ngIf="pacienteStep === 0">
         <ng-template matStepLabel>Datos Personales</ng-template>
-        <div class="input-pair-container">
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="nombre"
-              formControlName="nombre"
-              (blur)="updateErrorMessage(nombre)"
-              required
-            />
-            @if (nombre.invalid) {
-            <mat-error>{{ nombreErrorMessage }}</mat-error>
-            }
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="apellido"
-              formControlName="apellido"
-              required
-              (blur)="updateErrorMessage(apellido)"
-            />
-            @if (apellido.invalid) {
-            <mat-error>{{ apellidoErrorMessage }}</mat-error>
-            }
-          </mat-form-field>
-        </div>
+        <app-form-datos-personales
+          (nextEvent)="stepperNext($event, 'paciente')"
+        ></app-form-datos-personales>
+      </mat-step>
 
-        <div class="input-pair-container">
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="edad"
-              formControlName="edad"
-              type="number"
-              required
-              (blur)="updateErrorMessage(edad)"
-            />
-            @if (edad.invalid) {
-            <mat-error>{{ edadErrorMessage }}</mat-error>
-            }
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="DNI"
-              formControlName="DNI"
-              type="number"
-              required
-              (blur)="updateErrorMessage(DNI)"
-            />
-            @if (DNI.invalid) {
-            <mat-error>{{ DNIErrorMessage }}</mat-error>
-            }
-          </mat-form-field>
-        </div>
+      <mat-step *ngIf="pacienteStep === 1">
+        <ng-template matStepLabel>Datos del paciente</ng-template>
+        <app-form-datos-especificos
+          (onPreviousEvent)="stepperPrevious('paciente')"
+          (onPicEvent)="handlePic($event[0], $event[1], true)"
+          (onNextEvent)="registrarPersona($event, true)"
+        ></app-form-datos-especificos>
 
-        <div class="input-pair-container">
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="clave"
-              formControlName="clave"
-              required
-              (blur)="updateErrorMessage(clave)"
-            />
-            @if (clave.invalid) {
-            <mat-error>{{ claveErrorMessage }}</mat-error>
-            }
-          </mat-form-field>
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="clave repetida"
-              formControlName="claveRepetida"
-              required
-              (blur)="updateErrorMessage(claveRepetida)"
-            />
-            @if (claveRepetida.invalid) {
-            <mat-error>{{ claveRepetidaErrorMessage }}</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <div id="input-email" class="input-pair-container">
-          <mat-form-field>
-            <input
-              matInput
-              placeholder="email"
-              formControlName="email"
-              required
-              (blur)="updateErrorMessage(email)"
-            />
-            @if (email.invalid) {
-            <mat-error>{{ emailErrorMessage }}</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <div class="buttons">
-          <button mat-button matStepperNext type="button">Siguiente</button>
-        </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="frmRegister">
-      <form [formGroup]="frmRegister">
-        <ng-template matStepLabel>
-          Datos del @if (categoria == 'paciente') { paciente }@else {
-          especialista }
-        </ng-template>
-
-        @if (categoria == 'paciente') {
-        <button
-          type="button"
-          mat-raised-button
-          class="btnPic"
-          (click)="avatarInput.click()"
-        >
-          Elija una foto para su avatar
-        </button>
-        <input
-          hidden
-          (change)="onAvatarSelected($event)"
-          #avatarInput
-          type="file"
-          id="file"
-          formControlName="fotoAvatar"
-          accept="image/png,image/PNG,image/jpg,image/pjeg"
-        />
-        }@else {
-          @if(options.length > 0){
-            <mat-form-field class="example-full-width">
-              <mat-label>Especialida</mat-label>
-              <input
-                type="text"
-                matInput
-                [formControl]="especialidad"
-                [matAutocomplete]="auto"
-                name="busqueda"
-              />
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                @for (option of filteredOptions | async; track option) {
-                <mat-option [value]="option">{{ option.nombre }}</mat-option>
-                }
-              </mat-autocomplete>
-            </mat-form-field>
-          }
-        }
-        <button
-          type="button"
-          mat-raised-button
-          class="btnPic"
-          (click)="PerfilInput.click()"
-        >
-          Elija una foto para su perfil
-        </button>
-        <input
-          hidden
-          (change)="onPerfilSelected($event)"
-          #PerfilInput
-          type="file"
-          id="file"
-          formControlName="fotoPerfil"
-          accept="image/png,image/PNG,image/jpg,image/pjeg"
-        />
-
-        <mat-card class="example-card">
-          <mat-card-header>
-            @if(urlAvatar != "" || categoria != 'paciente' && urlPerfil != ""){
+        @if(frmDatosPersonales){
+        <div id="card-container">
+          <mat-card class="card">
+            <mat-card-header>
+              @if(urlAvatar != ""){
+              <img mat-card-avatar alt="imagen de avatar" [src]="urlAvatar" />
+              <!-- [src]="categoria == 'paciente' ? urlAvatar : urlPerfil" -->
+              }
+              <mat-card-title
+                >{{ frmDatosPersonales.controls["nombre"].value }}
+                {{
+                  frmDatosPersonales.controls["apellido"].value
+                }}</mat-card-title
+              >
+            </mat-card-header>
+            @if(urlPerfil != ""){
             <img
-              mat-card-avatar
-              [src]="categoria == 'paciente' ? urlAvatar : urlPerfil"
-              alt="imagen de avatar"
+              mat-card-image
+              [src]="urlPerfil"
+              alt="imagen de perfil"
+              id="fotoPerfil"
             />
             }
-            <mat-card-title
-              >{{ nombre.value }} {{ apellido.value }}</mat-card-title
-            >
-          </mat-card-header>
-          @if(urlPerfil != ""){
-          <img
-            mat-card-image
-            [src]="urlPerfil"
-            alt="imagen de perfil"
-            id="fotoPerfil"
-          />
-          }
-        </mat-card>
-
-        <div class="buttons">
-          <button mat-raised-button matStepperPrevious type="button">
-            Anterior
-          </button>
-          <button
-            mat-raised-button
-            matStepperNext
-            color="accent"
-            (click)="registrarPersona()"
-          >
-            Terminar
-          </button>
+          </mat-card>
         </div>
-      </form>
-    </mat-step>
-  </mat-vertical-stepper>
-</div>
+        }
+      </mat-step>
+    </mat-vertical-stepper>
+  </mat-tab>
+  <mat-tab label="Especialista">
+    <mat-vertical-stepper
+      [linear]="true"
+      #stepperEspecialista
+      [animationDuration]="duration"
+    >
+      <mat-step *ngIf="especialistaStep === 0">
+        <ng-template matStepLabel>Datos del especialista</ng-template>
+        <app-form-datos-personales (nextEvent)="stepperNext($event, 'especialista')"></app-form-datos-personales>
+      </mat-step>
+
+      <mat-step *ngIf="especialistaStep === 1">
+        <app-form-datos-especificos
+          categoria="especialista"
+          (onPreviousEvent)="stepperPrevious('especialista')"
+          (onPicEvent)="handlePic($event[0], $event[1], true)"
+          (onNextEvent)="registrarPersona($event, true)"
+        ></app-form-datos-especificos>
+
+        @if(frmDatosPersonales){
+        <div id="card-container">
+          <mat-card class="card">
+            <mat-card-header>
+              @if(urlPerfil != ""){
+              <img mat-card-avatar alt="imagen de avatar" [src]="urlPerfil" />
+              }
+              <mat-card-title
+                >{{ frmDatosPersonales.controls["nombre"].value }}
+                {{
+                  frmDatosPersonales.controls["apellido"].value
+                }}</mat-card-title
+              >
+            </mat-card-header>
+            @if(urlPerfil != ""){
+            <img
+              mat-card-image
+              [src]="urlPerfil"
+              alt="imagen de perfil"
+              id="fotoPerfil"
+            />
+            }
+          </mat-card>
+        </div>
+        }
+      </mat-step>
+    </mat-vertical-stepper>
+  </mat-tab>
+</mat-tab-group>

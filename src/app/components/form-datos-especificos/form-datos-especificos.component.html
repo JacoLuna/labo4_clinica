@@ -1,0 +1,153 @@
+@if (categoria == 'paciente') {
+  <form [formGroup]="frmDatosEspecificosPaciente">
+    @if(optionsObraSocial.length > 0){
+    <mat-form-field id="buscador" class="example-full-width">
+      <mat-label>Obras sociales</mat-label>
+  
+      <input
+        type="text"
+        matInput
+        formControlName="obraSocial"
+        [matAutocomplete]="auto"
+        name="busqueda"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        @for (option of filteredObrasSociales | async; track option) {
+        <mat-option [value]="option">{{ option.nombre }}</mat-option>
+        }
+      </mat-autocomplete>
+      @if (frmDatosEspecificosPaciente.controls['obraSocial'].invalid) {
+      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      }
+    </mat-form-field>
+    }
+    <button
+      type="button"
+      mat-raised-button
+      class="btnPic"
+      (click)="avatarInput.click()"
+    >
+      Elija una foto para su avatar
+    </button>
+    <input
+      id="inputAvatarPic"
+      hidden
+      (change)="onAvatarSelected($event)"
+      #avatarInput
+      type="file"
+      formControlName="fotoAvatar"
+      accept="image/png,image/PNG,image/jpg,image/pjeg"
+      (cancel)="avatarPicCanceled()"
+    />
+    @if (frmDatosEspecificosPaciente.controls['fotoAvatar'].invalid) {
+    <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+    }
+    <button
+      type="button"
+      mat-raised-button
+      class="btnPic"
+      (click)="perfilInput.click()"
+    >
+      Elija una foto de perfil
+    </button>
+    <input
+      id="inputPerfilPic"
+      hidden
+      (change)="onPerfilSelected($event)"
+      #perfilInput
+      type="file"
+      formControlName="fotoPerfil"
+      accept="image/png,image/PNG,image/jpg,image/pjeg"
+      (cancel)="perfilPicCanceled()"
+    />
+    @if (frmDatosEspecificosPaciente.controls['fotoPerfil'].invalid) {
+    <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+    }
+    <div class="buttons">
+      <button
+        mat-raised-button
+        matStepperPrevious
+        type="button"
+        (click)="anterior()"
+      >
+        Anterior
+      </button>
+      <button
+        mat-raised-button
+        matStepperNext
+        color="accent"
+        (click)="siguiente()"
+      >
+        Terminar
+      </button>
+    </div>
+  </form>
+}@else {
+  <form [formGroup]="frmDatosEspecificosEspecialista">
+    @if(optionsEspecialidad.length > 0){
+    <mat-form-field id="buscador" class="example-full-width">
+      <mat-label>Especialidad</mat-label>
+  
+      <input
+        type="text"
+        matInput
+        formControlName="especialidad"
+        [matAutocomplete]="auto"
+        name="busqueda"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+        @for (option of filteredEspecialidades | async; track option) {
+        <mat-option [value]="option">{{ option.nombre }}</mat-option>
+        }
+      </mat-autocomplete>
+      @if (frmDatosEspecificosEspecialista.controls['especialidad'].invalid) {
+      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      }
+    </mat-form-field>
+    }
+  
+    <button
+      type="button"
+      mat-raised-button
+      class="btnPic"
+      (click)="perfilInput.click()"
+    >
+      Elija una foto de perfil
+    </button>
+    <input
+      id="inputPerfilPic"
+      hidden
+      (change)="onPerfilSelected($event)"
+      #perfilInput
+      type="file"
+      formControlName="fotoPerfil"
+      accept="image/png,image/PNG,image/jpg,image/pjeg"
+      (cancel)="perfilPicCanceled()"
+    />
+    @if (frmDatosEspecificosEspecialista.controls['fotoPerfil'].invalid) {
+    <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+    }
+    <div class="buttons">
+      <button
+        mat-raised-button
+        matStepperPrevious
+        type="button"
+        (click)="anterior()"
+      >
+        Anterior
+      </button>
+      <button
+        mat-raised-button
+        matStepperNext
+        color="accent"
+        (click)="siguiente()"
+      >
+        Terminar
+      </button>
+    </div>
+  </form>
+}
+
+
+
+

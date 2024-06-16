@@ -1,6 +1,12 @@
 <mat-drawer-container class="container" autosize [hasBackdrop]="true">
   <mat-drawer #drawer class="sidenav" mode="side">
-    <button (click)="showFiller = !showFiller" mat-raised-button>
+    
+    <div>
+      <button mat-stroked-button routerLinkActive="active" routerLink="/registrarse">
+        Registrar
+      </button>
+    </div>
+    <!-- <button (click)="showFiller = !showFiller" mat-raised-button>
       Registrar
     </button>
     @if (showFiller) {
@@ -26,7 +32,7 @@
         Especialista
       </button>
     </div>
-    }
+    } -->
     <div>
       <button mat-stroked-button routerLinkActive="active" routerLink="/login">
         Ingresar
@@ -42,7 +48,7 @@
     </div>
     <div>
       <button mat-stroked-button routerLinkActive="active" routerLink="/turnos">
-        turnos
+        Turnos
       </button>
     </div>
   </mat-drawer>

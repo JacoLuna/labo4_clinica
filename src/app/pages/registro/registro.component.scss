@@ -30,11 +30,27 @@ mat-vertical-stepper {
       margin: 1rem 0;
       width: 87%;
     }
-    mat-card{
+    #buscador{
+      margin-top: .5rem;
+    }
+    mat-error{
+      
       display: flex;
       align-self: center;
+    }
+  }
+  #card-container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    .card{
+      align-self: center;
       max-width: 300px;
-      margin-bottom: 1rem;
+      margin: 1rem 0;
+      mat-card-header{
+        
+      align-self: center;
+      }
       #fotoPerfil{
         width: 300px;
       }

@@ -14,6 +14,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { DatabaseService } from '../../services/database.service';
+import { MatStepperModule } from '@angular/material/stepper';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-login',
@@ -22,12 +24,14 @@ import { DatabaseService } from '../../services/database.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatStepperModule,
     FormsModule,
     ReactiveFormsModule,
     MatIcon,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  providers: [{provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }}]
 })
 export class LoginComponent {
   frmLogin: FormGroup;

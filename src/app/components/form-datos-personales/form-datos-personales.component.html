@@ -1,0 +1,116 @@
+<mat-icon (click)="fillFields()">workspaces</mat-icon>
+<form [formGroup]="frmDatosPersonales">
+    <div class="input-pair-container">
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="nombre"
+          formControlName="nombre"
+          required
+          />
+          <!-- (blur)="updateErrorMessage(frmDatosPersonales.controls['nombre'])" -->
+        @if (frmDatosPersonales.controls['nombre'].invalid) {
+        <mat-error>{{errrorCampoObligatorio}}</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="apellido"
+          formControlName="apellido"
+          required
+          />
+          <!-- (blur)="updateErrorMessage(apellido)" -->
+          @if (frmDatosPersonales.controls['apellido'].invalid) {
+            <mat-error>{{errrorCampoObligatorio}}</mat-error>
+            }
+      </mat-form-field>
+    </div>
+
+    <div class="input-pair-container">
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="edad"
+          formControlName="edad"
+          type="number"
+          required
+          />
+          <!-- (blur)="updateErrorMessage(edad)" -->
+          @if (frmDatosPersonales.controls['edad'].invalid) {
+            <mat-error>{{errrorCampoObligatorio}}</mat-error>
+            }
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="DNI"
+          formControlName="DNI"
+          type="number"
+          required
+          />
+          <!-- (blur)="updateErrorMessage(DNI)" -->
+        @if (frmDatosPersonales.controls['DNI'].invalid) {
+            <mat-error>{{errrorCampoObligatorio}}</mat-error>
+            }
+      </mat-form-field>
+    </div>
+
+    <div class="input-pair-container">
+      <mat-form-field>
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          placeholder="*******"
+          formControlName="clave"
+          required
+          />
+          <!-- (blur)="updateErrorMessage(clave)" -->
+        @if (frmDatosPersonales.controls['clave'].invalid) {
+            <mat-error>{{errrorCampoObligatorio}}</mat-error>
+            }
+      </mat-form-field>
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="seePass($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+        style="position: absolute"
+      >
+        <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+      </button>
+      <mat-form-field>
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          placeholder="*******"
+          formControlName="claveRepetida"
+          required
+          />
+          <!-- (blur)="updateErrorMessage(clave)" -->
+        @if (frmDatosPersonales.controls['claveRepetida'].invalid) {
+            <mat-error>{{errrorCampoObligatorio}}</mat-error>
+            }
+      </mat-form-field>
+    </div>
+
+    <div id="input-email" class="input-pair-container">
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="email"
+          formControlName="email"
+          required
+          />
+          <!-- (blur)="updateErrorMessage(email)" -->
+        @if (frmDatosPersonales.controls['email'].invalid) {
+            <mat-error>{{errrorCampoObligatorio}}</mat-error>
+            }
+      </mat-form-field>
+    </div>
+
+    <div class="buttons">
+      <button mat-button (click)="siguiente()">Siguiente</button>
+    </div>
+  </form>
