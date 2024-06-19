@@ -1,26 +1,13 @@
 form {
   display: flex;
   flex-direction: column;
-
+  
+  #tooltip:active{
+    scale: .8;
+  }
   .buttons {
     display: flex;
     justify-content: space-between;
-  }
-  .input-pair-container {
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
-    mat-form-field {
-      width: 40%;
-    }
-  }
-  .input-pair-container:first-child {
-    margin-top: 0.5rem;
-  }
-  #input-email {
-    mat-form-field {
-      width: 87%;
-    }
   }
   .btnPic {
     display: flex;
@@ -52,3 +39,4 @@ form {
     }
   }
 }
+

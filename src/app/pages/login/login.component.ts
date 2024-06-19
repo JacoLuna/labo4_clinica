@@ -71,6 +71,7 @@ export class LoginComponent {
   }
   login() {
     this.bd.buscarPersonaPorCorreo(this.correo.value!).then( p => {
+      console.log(p);
       this.auth
         .ingresarFireAuth(this.correo.value!, this.clave.value!, p.tipoUsuario)
         .then(() => {

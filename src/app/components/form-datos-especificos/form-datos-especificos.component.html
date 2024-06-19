@@ -1,153 +1,188 @@
 @if (categoria == 'paciente') {
-  <form [formGroup]="frmDatosEspecificosPaciente">
-    @if(optionsObraSocial.length > 0){
-    <mat-form-field id="buscador" class="example-full-width">
-      <mat-label>Obras sociales</mat-label>
-  
-      <input
-        type="text"
-        matInput
-        formControlName="obraSocial"
-        [matAutocomplete]="auto"
-        name="busqueda"
-      />
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        @for (option of filteredObrasSociales | async; track option) {
-        <mat-option [value]="option">{{ option.nombre }}</mat-option>
-        }
-      </mat-autocomplete>
-      @if (frmDatosEspecificosPaciente.controls['obraSocial'].invalid) {
-      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+<form [formGroup]="frmDatosEspecificosPaciente">
+  @if(optionsObraSocial.length > 0){
+  <mat-form-field id="buscador" class="example-full-width">
+    <mat-label>Obras sociales</mat-label>
+
+    <input
+      type="text"
+      matInput
+      formControlName="obraSocial"
+      [matAutocomplete]="auto"
+      name="busqueda"
+    />
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      @for (option of filteredObrasSociales | async; track option) {
+      <mat-option [value]="option">{{ option.nombre }}</mat-option>
       }
-    </mat-form-field>
-    }
-    <button
-      type="button"
-      mat-raised-button
-      class="btnPic"
-      (click)="avatarInput.click()"
-    >
-      Elija una foto para su avatar
-    </button>
-    <input
-      id="inputAvatarPic"
-      hidden
-      (change)="onAvatarSelected($event)"
-      #avatarInput
-      type="file"
-      formControlName="fotoAvatar"
-      accept="image/png,image/PNG,image/jpg,image/pjeg"
-      (cancel)="avatarPicCanceled()"
-    />
-    @if (frmDatosEspecificosPaciente.controls['fotoAvatar'].invalid) {
+    </mat-autocomplete>
+    @if (frmDatosEspecificosPaciente.controls['obraSocial'].invalid) {
     <mat-error>{{ errrorCampoObligatorio }}</mat-error>
     }
+  </mat-form-field>
+  }
+  <button
+    type="button"
+    mat-raised-button
+    class="btnPic"
+    (click)="avatarInput.click()"
+  >
+    Elija una foto para su avatar
+  </button>
+  <input
+    id="inputAvatarPic"
+    hidden
+    (change)="onAvatarSelected($event)"
+    #avatarInput
+    type="file"
+    formControlName="fotoAvatar"
+    accept="image/png,image/PNG,image/jpg,image/pjeg"
+    (cancel)="avatarPicCanceled()"
+  />
+  @if (frmDatosEspecificosPaciente.controls['fotoAvatar'].invalid) {
+  <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+  }
+  <button
+    type="button"
+    mat-raised-button
+    class="btnPic"
+    (click)="perfilInput.click()"
+  >
+    Elija una foto de perfil
+  </button>
+  <input
+    id="inputPerfilPic"
+    hidden
+    (change)="onPerfilSelected($event)"
+    #perfilInput
+    type="file"
+    formControlName="fotoPerfil"
+    accept="image/png,image/PNG,image/jpg,image/pjeg"
+    (cancel)="perfilPicCanceled()"
+  />
+  @if (frmDatosEspecificosPaciente.controls['fotoPerfil'].invalid) {
+  <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+  }
+  <div class="buttons">
     <button
-      type="button"
       mat-raised-button
-      class="btnPic"
-      (click)="perfilInput.click()"
+      matStepperPrevious
+      type="button"
+      (click)="anterior()"
     >
-      Elija una foto de perfil
+      Anterior
     </button>
-    <input
-      id="inputPerfilPic"
-      hidden
-      (change)="onPerfilSelected($event)"
-      #perfilInput
-      type="file"
-      formControlName="fotoPerfil"
-      accept="image/png,image/PNG,image/jpg,image/pjeg"
-      (cancel)="perfilPicCanceled()"
-    />
-    @if (frmDatosEspecificosPaciente.controls['fotoPerfil'].invalid) {
-    <mat-error>{{ errrorCampoObligatorio }}</mat-error>
-    }
-    <div class="buttons">
-      <button
-        mat-raised-button
-        matStepperPrevious
-        type="button"
-        (click)="anterior()"
-      >
-        Anterior
-      </button>
-      <button
-        mat-raised-button
-        matStepperNext
-        color="accent"
-        (click)="siguiente()"
-      >
-        Terminar
-      </button>
-    </div>
-  </form>
+    <button
+      mat-raised-button
+      matStepperNext
+      color="accent"
+      (click)="siguiente()"
+    >
+      Terminar
+    </button>
+  </div>
+</form>
 }@else {
-  <form [formGroup]="frmDatosEspecificosEspecialista">
-    @if(optionsEspecialidad.length > 0){
-    <mat-form-field id="buscador" class="example-full-width">
-      <mat-label>Especialidad</mat-label>
-  
-      <input
-        type="text"
-        matInput
-        formControlName="especialidad"
-        [matAutocomplete]="auto"
-        name="busqueda"
-      />
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-        @for (option of filteredEspecialidades | async; track option) {
-        <mat-option [value]="option">{{ option.nombre }}</mat-option>
-        }
-      </mat-autocomplete>
-      @if (frmDatosEspecificosEspecialista.controls['especialidad'].invalid) {
-      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
-      }
-    </mat-form-field>
-    }
-  
-    <button
-      type="button"
-      mat-raised-button
-      class="btnPic"
-      (click)="perfilInput.click()"
-    >
-      Elija una foto de perfil
-    </button>
+<form [formGroup]="frmDatosEspecificosEspecialista">
+  @if(!addEsp){ @if(optionsEspecialidad.length > 0){
+  <mat-icon
+    id="tooltip"
+    matTooltip="agregar especialidad"
+    matTooltipPosition="below"
+    matTooltipHideDelay="1000"
+    (click)="addEspecialidad()"
+    >add</mat-icon>
+    
+  <mat-form-field id="buscador" class="example-full-width">
+    <mat-label>Especialidad</mat-label>
     <input
-      id="inputPerfilPic"
-      hidden
-      (change)="onPerfilSelected($event)"
-      #perfilInput
-      type="file"
-      formControlName="fotoPerfil"
-      accept="image/png,image/PNG,image/jpg,image/pjeg"
-      (cancel)="perfilPicCanceled()"
+      type="text"
+      matInput
+      formControlName="especialidad"
+      [matAutocomplete]="auto"
+      name="busqueda"
     />
-    @if (frmDatosEspecificosEspecialista.controls['fotoPerfil'].invalid) {
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      @for (option of filteredEspecialidades | async; track option) {
+      <mat-option [value]="option">{{ option.nombre }}</mat-option>
+      }
+    </mat-autocomplete>
+    @if (frmDatosEspecificosEspecialista.controls['especialidad'].invalid) {
     <mat-error>{{ errrorCampoObligatorio }}</mat-error>
     }
-    <div class="buttons">
-      <button
-        mat-raised-button
-        matStepperPrevious
-        type="button"
-        (click)="anterior()"
-      >
-        Anterior
-      </button>
-      <button
-        mat-raised-button
-        matStepperNext
-        color="accent"
-        (click)="siguiente()"
-      >
-        Terminar
-      </button>
-    </div>
-  </form>
+  </mat-form-field>
+  } 
+  }@else{
+  <mat-icon
+    id="tooltip"
+    matTooltip="no agregar"
+    matTooltipPosition="below"
+    matTooltipHideDelay="1000"
+    (click)="addEspecialidad()"
+    >remove</mat-icon
+  >
+  <mat-form-field>
+    <mat-label>Especialidad</mat-label>
+    <input matInput type="text" formControlName="especialidad" />
+  </mat-form-field>
+
+  }
+
+  <button
+    type="button"
+    mat-raised-button
+    class="btnPic"
+    (click)="perfilInput.click()"
+  >
+    Elija una foto de perfil
+  </button>
+  <input
+    id="inputPerfilPic"
+    hidden
+    (change)="onPerfilSelected($event)"
+    #perfilInput
+    type="file"
+    formControlName="fotoPerfil"
+    accept="image/png,image/PNG,image/jpg,image/pjeg"
+    (cancel)="perfilPicCanceled()"
+  />
+  @if (frmDatosEspecificosEspecialista.controls['fotoPerfil'].invalid) {
+  <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+  }
+  <div class="buttons">
+    <button
+      mat-raised-button
+      matStepperPrevious
+      type="button"
+      (click)="anterior()"
+    >
+      Anterior
+    </button>
+    <button
+      mat-raised-button
+      matStepperNext
+      color="accent"
+      (click)="siguiente()"
+    >
+      Terminar
+    </button>
+  </div>
+</form>
+
+<!-- <ol>
+    <li>
+      <mat-form-field>
+        <mat-label>What's your name?</mat-label>
+        <input matInput [(ngModel)]="input" />
+      </mat-form-field>
+    </li>
+    <li>
+      <button mat-raised-button (click)="openDialog()">Pick one</button>
+    </li>
+    @if (input()) {
+      <li>
+        You chose: <em>{{input()}}</em>
+      </li>
+    }
+  </ol> -->
 }
-
-
-
-

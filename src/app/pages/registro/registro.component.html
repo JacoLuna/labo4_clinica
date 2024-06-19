@@ -65,7 +65,7 @@
           categoria="especialista"
           (onPreviousEvent)="stepperPrevious('especialista')"
           (onPicEvent)="handlePic($event[0], $event[1], true)"
-          (onNextEvent)="registrarPersona($event, true)"
+          (onNextEvent)="registrarPersona($event, false)"
         ></app-form-datos-especificos>
 
         @if(frmDatosPersonales){

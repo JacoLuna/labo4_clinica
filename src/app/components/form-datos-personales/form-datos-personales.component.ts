@@ -18,6 +18,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
+import {
+  MatSnackBar,
+  MatSnackBarAction,
+  MatSnackBarActions,
+  MatSnackBarLabel,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-form-datos-personales',
@@ -34,6 +41,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatAutocompleteModule,
     FormDatosPersonalesComponent,
     MatTabsModule,
+    MatButtonModule, MatSnackBarLabel, MatSnackBarActions, MatSnackBarAction
   ],
   templateUrl: './form-datos-personales.component.html',
   styleUrl: './form-datos-personales.component.scss',
@@ -41,22 +49,23 @@ import { MatTabsModule } from '@angular/material/tabs';
 export class FormDatosPersonalesComponent {
   @Output() nextEvent = new EventEmitter<FormGroup>();
   
-  hide : boolean = false;
-  frmDatosPersonales!: FormGroup;
+  hide : boolean = true;
+  frmDatosPersonales: FormGroup;
 
   errrorCampoObligatorio = 'Este campo es obligatorio';
+  errrorMinChar = 'el minimo de caracteres es de 6';
   constructor(
     public auth: AuthService,
     private formBuilder: FormBuilder,
-    private bd: DatabaseService
-  ) {
+    private bd: DatabaseService,
+    private _snackBar: MatSnackBar) {
     this.frmDatosPersonales = this.formBuilder.group({
       nombre : new FormControl(''),
       apellido : new FormControl(''),
       edad : new FormControl(''),
       DNI : new FormControl('', [Validators.minLength(7), Validators.maxLength(9)]),
       email : new FormControl('', [Validators.email]),
-      clave : new FormControl('', [Validators.minLength(6)]),
+      clave : new FormControl('', [Validators.required, Validators.minLength(6)]),
       claveRepetida : new FormControl('', [Validators.minLength(6)]),
     });
   }
@@ -78,4 +87,5 @@ export class FormDatosPersonalesComponent {
     this.frmDatosPersonales.controls['clave'].setValue('123456');
     this.frmDatosPersonales.controls['claveRepetida'].setValue('123456');
   }
+  
 }

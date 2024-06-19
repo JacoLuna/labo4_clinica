@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-  ViewChild,
-  Input,
-} from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,6 +20,9 @@ import { FormDatosPersonalesComponent } from '../../components/form-datos-person
 import { AuthService } from '../../services/auth.service';
 import { Colecciones, DatabaseService } from '../../services/database.service';
 import { startWith, map, Observable } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { TooltipPosition, MatTooltipModule } from '@angular/material/tooltip';
+import { SnackBarService } from '../../services/snack-bar.service';
 
 export interface obraSocial {
   id: string;
@@ -36,7 +32,6 @@ export interface especialidad {
   id: string;
   nombre: string;
 }
-
 
 @Component({
   selector: 'app-form-datos-especificos',
@@ -54,12 +49,15 @@ export interface especialidad {
     AsyncPipe,
     FormDatosPersonalesComponent,
     MatTabsModule,
+    MatTooltipModule,
   ],
   templateUrl: './form-datos-especificos.component.html',
   styleUrl: './form-datos-especificos.component.scss',
 })
 export class FormDatosEspecificosComponent {
-  @Output() onPicEvent = new EventEmitter<[file: File, tipoFoto: string, paciente: boolean]>();
+  @Output() onPicEvent = new EventEmitter<
+    [file: File, tipoFoto: string, paciente: boolean]
+  >();
   @Output() onNextEvent = new EventEmitter<FormGroup>();
   @Output() onPreviousEvent = new EventEmitter();
   @Input() categoria: string = 'paciente';
@@ -77,11 +75,14 @@ export class FormDatosEspecificosComponent {
   urlAvatar: string = '';
   picPerfilCanceled: boolean = false;
   picAvatarCanceled: boolean = false;
+  addEsp: boolean = false;
 
   constructor(
     public auth: AuthService,
     private formBuilder: FormBuilder,
-    private bd: DatabaseService
+    private bd: DatabaseService,
+    private dialog: MatDialog,
+    private snackBar: SnackBarService
   ) {
     this.frmDatosEspecificosPaciente = this.formBuilder.group({
       fotoAvatar: new FormControl(''),
@@ -92,7 +93,7 @@ export class FormDatosEspecificosComponent {
     });
     this.frmDatosEspecificosEspecialista = this.formBuilder.group({
       fotoPerfil: new FormControl(''),
-      especialidad: new FormControl<string | obraSocial>('', [
+      especialidad: new FormControl<string | especialidad>('', [
         Validators.required,
       ]),
     });
@@ -156,11 +157,67 @@ export class FormDatosEspecificosComponent {
     this.picAvatarCanceled = true;
   }
   siguiente() {
+    let espExiste = false;
+    if (this.addEsp) {
+      this.bd
+        .traerColeccion<especialidad>(Colecciones.Especialidades)
+        .then((especialidades) => {
+          especialidades.forEach((esp) => {
+            if (
+              esp.nombre.toLowerCase() == this.frmDatosEspecificosEspecialista.controls['especialidad'].value.nombre.toLowerCase()
+            ) {
+              espExiste = true;
+            }
+          });
+        });
+    }
+
     if (this.categoria == 'paciente')
       this.onNextEvent.emit(this.frmDatosEspecificosPaciente);
-    else this.onNextEvent.emit(this.frmDatosEspecificosEspecialista);
+    else {
+      if ((this.addEsp && !espExiste) || !this.addEsp) {
+        // this.onNextEvent.emit(this.frmDatosEspecificosEspecialista);
+      } else {
+        this.snackBar.openSnackBar('esa especiliadad ya existe', 'Ok', 2000);
+      }
+    }
   }
   anterior() {
     this.onPreviousEvent.emit();
   }
+
+  addEspecialidad() {
+    this.addEsp = !this.addEsp;
+  }
+  /*
+  //un intento de algo
+  tittle: string = 'titulo';
+  subtitulos: string = 'subtitulo';
+  cancel: string = 'cancel';
+  accept: string = 'accept';
+  input = signal('');
+  inputLabel: string = 'inputLabel';
+
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogInputComponent, {
+      data: {
+        tittle: this.tittle,
+        subtitulos: this.subtitulos,
+        cancel: this.cancel,
+        accept: this.accept,
+        input: this.input(),
+        inputLabel: this.inputLabel,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result !== undefined) {
+        this.input.set(result);
+        console.log(this.input());
+        this.frmDatosEspecificosEspecialista.controls['especialidad'].setValue(result);
+        console.log(this.frmDatosEspecificosEspecialista.controls['especialidad'].value);
+      }
+    });
+  }*/
 }
