@@ -31,7 +31,12 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
-  providers: [{provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }}]
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { displayDefaultIndicatorType: false },
+    },
+  ],
 })
 export class LoginComponent {
   frmLogin: FormGroup;
@@ -41,6 +46,38 @@ export class LoginComponent {
   claveErrorMessage = '';
   hide = true;
 
+  accesosRapido = [{
+    img :"https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2Fpacientes%2Favatar-admin1-perez-11111111?alt=media&token=57f39c64-2558-4fb1-92fa-81fc60f0c27a",
+    email :'admin1@gmail.com',
+    clave : 'admin1',
+    },
+    {
+    img : "https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2Fespecialistas%2Fperfil-Roberto-Carlos-32145678?alt=media&token=09f50fcd-3bf9-4509-a655-aa6201bf54bb",
+    email : 'roberto@gmail.com',
+    clave : 'especialista',
+    },
+    {
+    img :"https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2Fespecialistas%2Fperfil-juan-Vazques-41123678?alt=media&token=02e130d5-d4c8-4da4-bf82-f5bb3df184d5",
+    email :'juanvasquez@gmail.com',
+    clave : 'especialista',
+    },
+    {
+    img : "https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2Fpacientes%2Favatar-Marcos-Laporte-41628819?alt=media&token=9034e323-a20a-47d9-acca-17c99f5dc462",
+    email : 'marcos@gmail.com',
+    clave : 'paciente',
+    },
+    {
+    img : "https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2Fpacientes%2Favatar-kevin-veliz-40328819?alt=media&token=174ab3ba-b41a-4c85-94a5-bcd804955dae",
+    email : "kevin@gmail.com",
+    clave : 'paciente',
+    },
+    {
+    img : "https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2Fpacientes%2Favatar-Yober-Marlow-17367299?alt=media&token=f57a688a-9528-4dd4-a043-87c6299256ca"
+,
+    email : 'yober@gmail.com',
+    clave : 'paciente',
+      }];
+   
   constructor(
     public auth: AuthService,
     private formBuilder: FormBuilder,
@@ -70,17 +107,16 @@ export class LoginComponent {
     event.stopPropagation();
   }
   login() {
-    this.bd.buscarPersonaPorCorreo(this.correo.value!).then( p => {
-      console.log(p);
+    this.bd.buscarPersonaPorCorreo(this.correo.value!).then((p) => {
       this.auth
-        .ingresarFireAuth(this.correo.value!, this.clave.value!, p.tipoUsuario)
+        .ingresarFireAuth(this.correo.value!, this.clave.value!)
         .then(() => {
           this.router.navigate(['/home']);
         });
     });
   }
-  admin(){
-    this.correo.setValue('admin@gmail.com');
-    this.clave.setValue('admin1');
+  completarCampos(correo: string, clave: string) {
+    this.correo.setValue(correo);
+    this.clave.setValue(clave);
   }
 }

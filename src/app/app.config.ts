@@ -8,8 +8,6 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { AngularFireModule } from '@angular/fire/compat';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
-import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,17 +25,18 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    importProvidersFrom(
-      AngularFireModule.initializeApp({
-        apiKey: "AIzaSyCFt1PlKZDi1248k-EjAhUaI521JeFKMsw",
-        authDomain: "lab4lunajaco.firebaseapp.com",
-        projectId: "lab4lunajaco",
-        storageBucket: "lab4lunajaco.appspot.com",
-        messagingSenderId: "85267814802",
-        appId: "1:85267814802:web:00d2f43a8038fa48f2c94b"
-      })
-    ),
     provideAnimationsAsync(),
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ],
 };
+
+
+// importProvidersFrom(
+//   AngularFireModule.initializeApp({
+//     apiKey: "AIzaSyCFt1PlKZDi1248k-EjAhUaI521JeFKMsw",
+//     authDomain: "lab4lunajaco.firebaseapp.com",
+//     projectId: "lab4lunajaco",
+//     storageBucket: "lab4lunajaco.appspot.com",
+//     messagingSenderId: "85267814802",
+//     appId: "1:85267814802:web:00d2f43a8038fa48f2c94b"
+//   })
+// ),

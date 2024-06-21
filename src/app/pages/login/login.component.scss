@@ -1,7 +1,31 @@
-form{
+div {
+  box-sizing: border-box;
+  mat-stepper {
+    display: flex;
+    form {
+      display: flex;
+      flex-direction: column;
+      button {
+        margin: 0.5rem 0;
+      }
+    }
+  }
+
+  #acceso-rapido-container {
+    position: absolute;
+    left: 1%;
+    bottom: 1%;
     display: flex;
     flex-direction: column;
-    button{
-        margin: .5rem 0;
+    button {
+      background-color: transparent;
+      width: 75px;
+      height: 75px;
+      img {
+        border-radius: 50%;
+        width: 75px;
+        height: 75px;
+      }
     }
+  }
 }

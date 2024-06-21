@@ -42,7 +42,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent),
     canActivate: [authorizedGuard, () => redirectUnauthorizedTo(['/home'])],
-    // ...canActivate(() => redirectUnauthorizedTo(['/home'])),
   },
   { path: '**', component: HomeComponent },
 ];

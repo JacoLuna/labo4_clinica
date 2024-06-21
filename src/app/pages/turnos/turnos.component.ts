@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-turnos',
@@ -8,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './turnos.component.scss'
 })
 export class TurnosComponent {
+  constructor(protected auth: AuthService){
 
+  }
 }

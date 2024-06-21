@@ -1,52 +1,65 @@
-<mat-stepper>
+<div>
+  <mat-stepper>
+    <ng-template matStepperIcon="edit">
+      <mat-icon color="accent">key</mat-icon>
+    </ng-template>
 
-  <ng-template matStepperIcon="edit">
-    <mat-icon color="accent">key</mat-icon>
-  </ng-template>
+    <mat-step [stepControl]="frmLogin">
+      <form [formGroup]="frmLogin">
+        <ng-template matStepLabel>Ingrese sus datos</ng-template>
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            placeholder="carlosJuan@gmail.com"
+            [formControl]="correo"
+            (blur)="updateErrorMessage(correo)"
+            required
+          />
+          @if (correo.invalid) {
+          <mat-error>{{ emailErrorMessage }}</mat-error>
+          }
+        </mat-form-field>
 
-  <mat-step [stepControl]="frmLogin">
-    <form [formGroup]="frmLogin">
-      <ng-template matStepLabel>Ingrese sus datos</ng-template>
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          placeholder="carlosJuan@gmail.com"
-          [formControl]="correo"
-          (blur)="updateErrorMessage(correo)"
-          required
-        />
-        @if (correo.invalid) {
-        <mat-error>{{ emailErrorMessage }}</mat-error>
-        }
-      </mat-form-field>
+        <mat-form-field>
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            placeholder="*******"
+            [formControl]="clave"
+            (blur)="updateErrorMessage(clave)"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+          @if (clave.invalid) {
+          <mat-error>{{ claveErrorMessage }}</mat-error>
+          }
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Contraseña</mat-label>
-        <input
-          matInput
-          [type]="hide ? 'password' : 'text'"
-          placeholder="*******"
-          [formControl]="clave"
-          (blur)="updateErrorMessage(clave)"
-          required
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="clickEvent($event)"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide"
-        >
-          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        <button mat-flat-button color="accent" (click)="login()">
+          Ingresar
         </button>
-        @if (clave.invalid) {
-        <mat-error>{{ claveErrorMessage }}</mat-error>
-        }
-      </mat-form-field>
-
-      <button mat-flat-button color="accent" (click)="login()">Ingresar</button>
-      <button mat-flat-button color="accent" (click)="admin()">Admin</button>
-    </form>
-  </mat-step>
-</mat-stepper>
+      </form>
+    </mat-step>
+  </mat-stepper>
+  <div id="acceso-rapido-container">
+    @for (acceso of accesosRapido; track $index) {
+    <button mat-fab aria-label="Example icon button with a heart icon">
+      <img
+        [src]="acceso.img"
+        alt="imagen del usuario"
+        (click)="completarCampos(acceso.email, acceso.clave)"
+      />
+    </button>
+    }
+  </div>
+</div>

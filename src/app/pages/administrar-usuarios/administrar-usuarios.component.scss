@@ -1,0 +1,15 @@
+#content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  #tablas {
+    margin-top: 30rem;
+    h2 {
+      margin: 1rem;
+    }
+  }
+  #app-registro-container {
+    margin-top: 2rem;
+  }
+}

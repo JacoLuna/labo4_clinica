@@ -160,7 +160,6 @@ export class DatabaseService {
     const Personas = await this.traerColeccion<Persona>(Colecciones.Personas);
     const index = Personas.findIndex(u => u.correo === correo);
     // if (index === -1) throw new Exception(ErrorCodes.CorreoNoRegistrado, 'Esta dirección de correo no está registrada.');
-
     return Personas[index];
   }
   async buscarEspecialistaPorCorreo(correo: string): Promise<Especialista> {

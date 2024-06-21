@@ -1,59 +1,60 @@
-mat-vertical-stepper {
-  width: 50rem;
-  form {
-    display: flex;
-    flex-direction: column;
+mat-tab-group {
+  mat-vertical-stepper {
+    width: 50rem;
+    form {
+      display: flex;
+      flex-direction: column;
 
-    .buttons{
-      display: flex;
-      justify-content: space-between;
-    }
-    .input-pair-container {
-      display: flex;
-      justify-content: space-evenly;
-      width: 100%;
-      mat-form-field {
-        width: 40%;
+      .buttons {
+        display: flex;
+        justify-content: space-between;
       }
-    }
-    .input-pair-container:first-child{
-      margin-top: .5rem;
-    }
-    #input-email {
-      mat-form-field {
+      .input-pair-container {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        mat-form-field {
+          width: 40%;
+        }
+      }
+      .input-pair-container:first-child {
+        margin-top: 0.5rem;
+      }
+      #input-email {
+        mat-form-field {
+          width: 87%;
+        }
+      }
+      .btnPic {
+        display: flex;
+        align-self: center;
+        margin: 1rem 0;
         width: 87%;
       }
-    }
-    .btnPic{
-      display: flex;
-      align-self: center;
-      margin: 1rem 0;
-      width: 87%;
-    }
-    #buscador{
-      margin-top: .5rem;
-    }
-    mat-error{
-      
-      display: flex;
-      align-self: center;
-    }
-  }
-  #card-container{
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    .card{
-      align-self: center;
-      max-width: 300px;
-      margin: 1rem 0;
-      mat-card-header{
-        
-      align-self: center;
+      #buscador {
+        margin-top: 0.5rem;
       }
-      #fotoPerfil{
-        width: 300px;
+      mat-error {
+        display: flex;
+        align-self: center;
+      }
+    }
+    #card-container {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      .card {
+        align-self: center;
+        max-width: 300px;
+        margin: 1rem 0;
+        mat-card-header {
+          align-self: center;
+        }
+        #fotoPerfil {
+          width: 300px;
+        }
       }
     }
   }
 }
+  

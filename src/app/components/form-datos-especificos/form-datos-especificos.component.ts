@@ -21,7 +21,7 @@ import { AuthService } from '../../services/auth.service';
 import { Colecciones, DatabaseService } from '../../services/database.service';
 import { startWith, map, Observable } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { TooltipPosition, MatTooltipModule } from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SnackBarService } from '../../services/snack-bar.service';
 
 export interface obraSocial {
@@ -64,6 +64,8 @@ export class FormDatosEspecificosComponent {
 
   frmDatosEspecificosPaciente!: FormGroup;
   frmDatosEspecificosEspecialista!: FormGroup;
+  frmDatosEspecificosAdmin!: FormGroup;
+  
   errrorCampoObligatorio = 'Este campo es obligatorio';
   filteredObrasSociales!: Observable<obraSocial[]>;
   filteredEspecialidades!: Observable<especialidad[]>;
@@ -85,19 +87,18 @@ export class FormDatosEspecificosComponent {
     private snackBar: SnackBarService
   ) {
     this.frmDatosEspecificosPaciente = this.formBuilder.group({
-      fotoAvatar: new FormControl(''),
-      fotoPerfil: new FormControl(''),
-      obraSocial: new FormControl<string | obraSocial>('', [
-        Validators.required,
-      ]),
+      fotoAvatar: new FormControl('', [Validators.required]),
+      fotoPerfil: new FormControl('', [Validators.required]),
+      obraSocial: new FormControl<string | obraSocial>('', [Validators.required]),
     });
     this.frmDatosEspecificosEspecialista = this.formBuilder.group({
-      fotoPerfil: new FormControl(''),
-      especialidad: new FormControl<string | especialidad>('', [
-        Validators.required,
-      ]),
+      fotoPerfil: new FormControl('', [Validators.required]),
+      especialidad: new FormControl<string | especialidad>('', [Validators.required]),
     });
-
+    this.frmDatosEspecificosAdmin = this.formBuilder.group({
+      fotoPerfil: new FormControl('', [Validators.required]),
+    });
+    
     this.bd.traerColeccion<obraSocial>(Colecciones.ObrasSociales).then((r) => {
       this.optionsObraSocial = r;
     });
@@ -158,29 +159,60 @@ export class FormDatosEspecificosComponent {
   }
   siguiente() {
     let espExiste = false;
-    if (this.addEsp) {
-      this.bd
-        .traerColeccion<especialidad>(Colecciones.Especialidades)
-        .then((especialidades) => {
-          especialidades.forEach((esp) => {
-            if (
-              esp.nombre.toLowerCase() == this.frmDatosEspecificosEspecialista.controls['especialidad'].value.nombre.toLowerCase()
-            ) {
-              espExiste = true;
+    if(
+      this.categoria == 'admin' &&
+      this.frmDatosEspecificosAdmin.controls['fotoPerfil'].value != ""
+      ||
+      this.categoria == 'especialista' && 
+      this.frmDatosEspecificosEspecialista.controls['fotoPerfil'].value != ""
+        ||
+      this.frmDatosEspecificosPaciente.controls['fotoPerfil'].value != "" && 
+      this.frmDatosEspecificosPaciente.controls['fotoAvatar'].value != ""){
+      if (this.addEsp) {
+        this.bd
+          .traerColeccion<especialidad>(Colecciones.Especialidades)
+          .then((especialidades) => {
+            especialidades.forEach((esp) => {
+              if (
+                esp.nombre.toLowerCase() === this.frmDatosEspecificosEspecialista.controls['especialidad'].value.toLowerCase()
+              ) {
+                espExiste = true;
+              }
+            });
+            if (!espExiste) {
+              this.onNextEvent.emit(this.frmDatosEspecificosEspecialista);
+            } else {
+              this.snackBar.openSnackBar('esa especiliadad ya existe', 'Ok', 2000);
             }
           });
-        });
-    }
-
-    if (this.categoria == 'paciente')
-      this.onNextEvent.emit(this.frmDatosEspecificosPaciente);
-    else {
-      if ((this.addEsp && !espExiste) || !this.addEsp) {
-        // this.onNextEvent.emit(this.frmDatosEspecificosEspecialista);
-      } else {
-        this.snackBar.openSnackBar('esa especiliadad ya existe', 'Ok', 2000);
+      }else{
+        if (this.categoria == 'paciente'){
+          this.onNextEvent.emit(this.frmDatosEspecificosPaciente);
+        }else if(this.categoria == 'especialista'){
+          this.onNextEvent.emit(this.frmDatosEspecificosEspecialista);
+        }else {
+          this.onNextEvent.emit(this.frmDatosEspecificosAdmin);
+        }
+      }
+    }else{
+      if(this.categoria == 'paciente' ){
+        if(this.frmDatosEspecificosPaciente.controls['fotoAvatar'].value == ""){
+        this.frmDatosEspecificosPaciente.controls['fotoAvatar'].setErrors({'invalid': true});
+        }
+        if(this.frmDatosEspecificosPaciente.controls['fotoPerfil'].value == ""){
+          this.frmDatosEspecificosPaciente.controls['fotoPerfil'].setErrors({'invalid': true});
+        }
+      }else if(this.categoria == 'especialista' ){
+        if(this.frmDatosEspecificosEspecialista.controls['fotoPerfil'].value == ""){
+          this.frmDatosEspecificosEspecialista.controls['fotoPerfil'].setErrors({'invalid': true});
+        }
+      }else{
+        if(this.frmDatosEspecificosAdmin.controls['fotoPerfil'].value == ""){
+          this.frmDatosEspecificosAdmin.controls['fotoPerfil'].setErrors({'invalid': true});
+        }
       }
     }
+
   }
   anterior() {
     this.onPreviousEvent.emit();
@@ -188,36 +220,7 @@ export class FormDatosEspecificosComponent {
 
   addEspecialidad() {
     this.addEsp = !this.addEsp;
+    console.log(this.addEsp);
+    this.frmDatosEspecificosEspecialista.controls['especialidad'].setValue('');
   }
-  /*
-  //un intento de algo
-  tittle: string = 'titulo';
-  subtitulos: string = 'subtitulo';
-  cancel: string = 'cancel';
-  accept: string = 'accept';
-  input = signal('');
-  inputLabel: string = 'inputLabel';
-
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(DialogInputComponent, {
-      data: {
-        tittle: this.tittle,
-        subtitulos: this.subtitulos,
-        cancel: this.cancel,
-        accept: this.accept,
-        input: this.input(),
-        inputLabel: this.inputLabel,
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result !== undefined) {
-        this.input.set(result);
-        console.log(this.input());
-        this.frmDatosEspecificosEspecialista.controls['especialidad'].setValue(result);
-        console.log(this.frmDatosEspecificosEspecialista.controls['especialidad'].value);
-      }
-    });
-  }*/
 }

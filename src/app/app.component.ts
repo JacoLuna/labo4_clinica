@@ -27,7 +27,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit{
   showFiller = false;
-
+  
   constructor(private router: Router, public auth: AuthService) {
     const ssUser = sessionStorage.getItem('usuario');
     this.auth.UsuarioEnSesion = ssUser ? JSON.parse(ssUser) : null;
@@ -39,14 +39,7 @@ export class AppComponent implements OnInit{
   logOut() {
     this.auth.signOut();
   }
-  registrarEspecialista() {
-    this.router.navigate(['/registrarse'], {
-      queryParams: { categoria: 'especialista' },
-    });
-  }
-  registrarPaciente() {
-    this.router.navigate(['/registrarse'], {
-      queryParams: { categoria: 'paciente' },
-    });
+  manageTurnos(){
+    this.router.navigate(['/turnos']);
   }
 }

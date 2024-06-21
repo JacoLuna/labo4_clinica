@@ -1,60 +1,49 @@
 <mat-drawer-container class="container" autosize [hasBackdrop]="true">
   <mat-drawer #drawer class="sidenav" mode="side">
-    
     <div>
-      <button mat-stroked-button routerLinkActive="active" routerLink="/registrarse">
-        Registrar
-      </button>
+      <h2>
+        @if (auth.UsuarioEnSesion) {
+          {{auth.UsuarioEnSesion.tipoUsuario}}
+        }@else {
+          Inivitado
+        }
+      </h2>
     </div>
-    <!-- <button (click)="showFiller = !showFiller" mat-raised-button>
-      Registrar
-    </button>
-    @if (showFiller) {
+    @if (auth.UsuarioEnSesion) {
+      <div>
+        <button mat-stroked-button (click)="logOut()">Salir</button>
+      </div>
+    }@else {
+      <div>
+        <button mat-stroked-button routerLinkActive="active" routerLink="/registrarse">
+          Registrar
+        </button>
+      </div>
+      <div>
+        <button mat-stroked-button routerLinkActive="active" routerLink="/login">
+          Ingresar
+        </button>
+      </div>
+    }
+    @if (auth.UsuarioEnSesion?.tipoUsuario == 'admin') {
+      <div>
+        <button mat-stroked-button routerLinkActive="active" routerLink="/administrar-usuarios">
+          Administrar usuarios
+        </button>
+      </div>
+    }
     <div>
-      <button
-        mat-stroked-button
-        routerLinkActive="active"
-        routerLink="/registrarse"
-        (click)="registrarPaciente()"
-        class="subMenu"
-      >
-        Paciente
-      </button>
-    </div>
-    <div>
-      <button
-        mat-stroked-button
-        routerLinkActive="active"
-        routerLink="/registrarse"
-        (click)="registrarEspecialista()"
-        class="subMenu"
-      >
-        Especialista
-      </button>
-    </div>
-    } -->
-    <div>
-      <button mat-stroked-button routerLinkActive="active" routerLink="/login">
-        Ingresar
-      </button>
-    </div>
-    <div>
-      <button mat-stroked-button (click)="logOut()">Salir</button>
-    </div>
-    <div>
-      <button mat-stroked-button routerLinkActive="active" routerLink="/administrar-usuarios">
-        Administrar usuarios
-      </button>
-    </div>
-    <div>
-      <button mat-stroked-button routerLinkActive="active" routerLink="/turnos">
+      <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()">
         Turnos
       </button>
     </div>
+    
   </mat-drawer>
   
   <div class="sidenav-content">
     <mat-icon (click)="drawer.toggle()">menu</mat-icon>
-    <router-outlet />
+    <div id="router-outlet">
+      <router-outlet />
+    </div>
   </div>
 </mat-drawer-container>

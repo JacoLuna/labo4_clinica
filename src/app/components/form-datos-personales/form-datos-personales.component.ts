@@ -53,20 +53,24 @@ export class FormDatosPersonalesComponent {
   frmDatosPersonales: FormGroup;
 
   errrorCampoObligatorio = 'Este campo es obligatorio';
-  errrorMinChar = 'el minimo de caracteres es de 6';
+  errrorMinChar = 'El minimo de caracteres es de 6';
+  errrorMin = 'Valor menor al aceptado';
+  errrorMax = 'Valor mayor al aceptado';
+  errrorDNIFormat = 'Ese formato no es de dni';
+  errrorMailFormat = 'Ese formato no es de mail';
   constructor(
     public auth: AuthService,
     private formBuilder: FormBuilder,
     private bd: DatabaseService,
     private _snackBar: MatSnackBar) {
     this.frmDatosPersonales = this.formBuilder.group({
-      nombre : new FormControl(''),
-      apellido : new FormControl(''),
-      edad : new FormControl(''),
-      DNI : new FormControl('', [Validators.minLength(7), Validators.maxLength(9)]),
-      email : new FormControl('', [Validators.email]),
+      nombre : new FormControl('', [Validators.required]),
+      apellido : new FormControl('', [Validators.required]),
+      edad : new FormControl('', [Validators.required, Validators.min(0), Validators.max(100)]),
+      DNI : new FormControl('', [Validators.required, Validators.pattern(/^\b[\d]{1,3}(\.|\-|\/| )?[\d]{3}(\.|\-|\/| )?[\d]{3}$/),]),
+      email : new FormControl('', [Validators.required, Validators.email]),
       clave : new FormControl('', [Validators.required, Validators.minLength(6)]),
-      claveRepetida : new FormControl('', [Validators.minLength(6)]),
+      claveRepetida : new FormControl('', [Validators.required, Validators.minLength(6)]),
     });
   }
 

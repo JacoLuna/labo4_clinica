@@ -31,9 +31,22 @@
         type="number"
         required
       />
-      <!-- (blur)="updateErrorMessage(edad)" -->
-      @if (frmDatosPersonales.controls['edad'].invalid) {
-      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      @if (frmDatosPersonales.controls['edad'].dirty && frmDatosPersonales.controls['edad'].errors) {
+        @if (frmDatosPersonales.controls['edad'].errors['required']) {
+          <mat-error>
+            <small>{{ errrorCampoObligatorio }}</small>
+          </mat-error>
+        }
+        @if (frmDatosPersonales.controls['edad'].errors['min']) {
+          <mat-error>
+            <small>{{ errrorMin }}</small>
+          </mat-error>
+        }
+        @if (frmDatosPersonales.controls['edad'].errors['max']) {
+          <mat-error>
+            <small>{{ errrorMax }}</small>
+          </mat-error>
+        }
       }
     </mat-form-field>
     <mat-form-field>
@@ -45,8 +58,24 @@
         required
       />
       <!-- (blur)="updateErrorMessage(DNI)" -->
-      @if (frmDatosPersonales.controls['DNI'].invalid) {
-      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      <!-- @if (frmDatosPersonales.controls['DNI'].invalid) {
+        <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      } -->
+      @if (frmDatosPersonales.controls['DNI'].dirty && frmDatosPersonales.controls['DNI'].errors) {
+        @if (frmDatosPersonales.controls['DNI'].errors['required']) {
+          <mat-error>
+            <small>
+              {{ errrorCampoObligatorio }}
+            </small>
+          </mat-error>
+        }
+        @if (frmDatosPersonales.controls['DNI'].errors['pattern']) {
+          <mat-error>
+            <small>
+              {{ errrorDNIFormat }}
+            </small>
+          </mat-error>
+        }
       }
     </mat-form-field>
   </div>
@@ -60,11 +89,11 @@
         formControlName="clave"
       />
       @if (frmDatosPersonales.controls['clave'].dirty && frmDatosPersonales.controls['clave'].errors) {
-        @if (frmDatosPersonales.controls['clave'].errors!['required']) {
-          <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+        @if (frmDatosPersonales.controls['clave'].errors['required']) {
+          <mat-error><small>{{errrorCampoObligatorio}}</small></mat-error>
         }
-        @if (frmDatosPersonales.controls['clave'].errors!['minLength']) {
-          <mat-error>{{ errrorMinChar }}</mat-error>
+        @if (frmDatosPersonales.controls['clave'].errors['minlength']) {
+          <mat-error><small>{{errrorMinChar}}</small></mat-error>
         }
       }
     </mat-form-field>
@@ -84,21 +113,29 @@
         [type]="hide ? 'password' : 'text'"
         placeholder="*******"
         formControlName="claveRepetida"
-        required
       />
-      <!-- (blur)="updateErrorMessage(clave)" -->
-      @if (frmDatosPersonales.controls['claveRepetida'].invalid) {
-      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      @if (frmDatosPersonales.controls['claveRepetida'].dirty && frmDatosPersonales.controls['claveRepetida'].errors) {
+        @if (frmDatosPersonales.controls['claveRepetida'].errors['required']) {
+          <mat-error><small>{{errrorCampoObligatorio}}</small></mat-error>
+        }
+        @if (frmDatosPersonales.controls['claveRepetida'].errors['minlength']) {
+          <mat-error><small>{{errrorMinChar}}</small></mat-error>
+        }
       }
     </mat-form-field>
   </div>
 
   <div id="input-email" class="input-pair-container">
     <mat-form-field>
-      <input matInput placeholder="email" formControlName="email" required />
+      <input matInput placeholder="email" formControlName="email"/>
       <!-- (blur)="updateErrorMessage(email)" -->
-      @if (frmDatosPersonales.controls['email'].invalid) {
-      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      @if (frmDatosPersonales.controls['email'].dirty && frmDatosPersonales.controls['email'].errors) {
+        @if (frmDatosPersonales.controls['email'].errors['required']) {
+          <mat-error><small>{{errrorCampoObligatorio}}</small></mat-error>
+        }
+        @if (frmDatosPersonales.controls['email'].errors['email']) {
+          <mat-error><small>{{errrorMailFormat}}</small></mat-error>
+        }
       }
     </mat-form-field>
   </div>

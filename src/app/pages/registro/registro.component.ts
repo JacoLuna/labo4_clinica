@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,10 +27,13 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormDatosPersonalesComponent } from '../../components/form-datos-personales/form-datos-personales.component';
 import { Persona } from '../../classes/persona';
 import { Paciente } from '../../classes/paciente';
-import { FormDatosEspecificosComponent, especialidad } from '../../components/form-datos-especificos/form-datos-especificos.component';
+import {
+  FormDatosEspecificosComponent,
+  especialidad,
+} from '../../components/form-datos-especificos/form-datos-especificos.component';
 import { Especialista } from '../../classes/especialista';
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { SnackBarService } from '../../services/snack-bar.service';
+import { Admin } from '../../classes/admin';
 
 @Component({
   selector: 'app-registro',
@@ -49,9 +58,11 @@ import { SnackBarService } from '../../services/snack-bar.service';
   ],
 })
 export class RegistroComponent implements OnInit {
+  @Input() admin: boolean = false;
   @ViewChild('stepperPaciente') private stepperPaciente!: MatStepper;
   @ViewChild('stepperEspecialista') private stepperEspecialista!: MatStepper;
-
+  @ViewChild('stepperAdmin') private stepperAdmin!: MatStepper;
+  
   protected duration: string = '1000';
 
   firstLoad = false;
@@ -62,6 +73,8 @@ export class RegistroComponent implements OnInit {
 
   pacienteStep: number = 0;
   especialistaStep: number = 0;
+  adminStep: number = 0;
+  
 
   constructor(
     public auth: AuthService,
@@ -74,78 +87,126 @@ export class RegistroComponent implements OnInit {
   ) {}
   ngOnInit(): void {}
 
-  registrarPersona(frmDatosEspecificos: FormGroup, paciente: boolean) {
+  registrarPersona(frmDatosEspecificos: FormGroup, categoria: string) {
     let persona: Persona;
-    let espExiste: boolean = false;
     if (frmDatosEspecificos.valid) {
-      if (paciente) {
-        persona = new Paciente(
-          '',
-          this.frmDatosPersonales.controls['nombre'].value,
-          this.frmDatosPersonales.controls['apellido'].value,
-          Number(this.frmDatosPersonales.controls['DNI'].value),
-          Number(this.frmDatosPersonales.controls['edad'].value),
-          [this.urlAvatar, this.urlPerfil],
-          this.frmDatosPersonales.controls['email'].value,
-          frmDatosEspecificos.controls['obraSocial'].value.nombre
-        );
-      } else {
-        persona = new Especialista(
-          '',
-          this.frmDatosPersonales.controls['nombre'].value,
-          this.frmDatosPersonales.controls['apellido'].value,
-          Number(this.frmDatosPersonales.controls['DNI'].value),
-          Number(this.frmDatosPersonales.controls['edad'].value),
-          this.urlPerfil,
-          this.frmDatosPersonales.controls['email'].value,
-          frmDatosEspecificos.controls['especialidad'].value.nombre
-        );
+      switch (categoria) {
+        case 'paciente':
+          persona = new Paciente(
+            '',
+            this.frmDatosPersonales.controls['nombre'].value,
+            this.frmDatosPersonales.controls['apellido'].value,
+            Number(this.frmDatosPersonales.controls['DNI'].value),
+            Number(this.frmDatosPersonales.controls['edad'].value),
+            [this.urlAvatar, this.urlPerfil],
+            this.frmDatosPersonales.controls['email'].value,
+            frmDatosEspecificos.controls['obraSocial'].value.nombre
+          );
+          break;
+        case 'especialista':
+          persona = new Especialista(
+            '',
+            this.frmDatosPersonales.controls['nombre'].value,
+            this.frmDatosPersonales.controls['apellido'].value,
+            Number(this.frmDatosPersonales.controls['DNI'].value),
+            Number(this.frmDatosPersonales.controls['edad'].value),
+            this.urlPerfil,
+            this.frmDatosPersonales.controls['email'].value,
+            frmDatosEspecificos.controls['especialidad'].value.nombre
+          );
+          break;
+        case 'admin':
+          persona = new Admin(
+            '',
+            this.frmDatosPersonales.controls['nombre'].value,
+            this.frmDatosPersonales.controls['apellido'].value,
+            Number(this.frmDatosPersonales.controls['DNI'].value),
+            Number(this.frmDatosPersonales.controls['edad'].value),
+            this.urlPerfil,
+            this.frmDatosPersonales.controls['email'].value,
+          );
+          break;
       }
-
-      if (paciente) {
-        this.bd.subirDoc(Colecciones.Pacientes, persona).then(() => {
-          console.log('se creó al paciente');
+      this.auth
+        .registrarFireAuth(persona!, this.frmDatosPersonales.controls['clave'].value
+        )
+        .then(() => {
+          switch (categoria) {
+            case 'paciente':
+              this.bd.subirDoc(Colecciones.Pacientes, persona);
+              this.snackBar.succesSnackBar(
+                'se creó al paciente con exito!!','Ok',
+                2000
+              );
+              break;
+            case 'especialista':
+              this.bd.subirDoc(Colecciones.Especialistas, persona);
+              this.snackBar.succesSnackBar(
+                'se creó al especialista con exito!!','Ok',
+                2000
+              );
+              break;
+            case 'admin':
+              this.snackBar.succesSnackBar(
+                'se creó al admin con exito!!','Ok',
+                2000
+              );
+              break;
+          }
+          if (!this.admin) this.router.navigate(['/home']);
+        })
+        .catch((e) => {
+          this.snackBar.openSnackBar(e, 'Ok');
         });
-      } else {
-        this.bd.subirDoc(Colecciones.Especialistas, persona).then(() => {
-          console.log('se creó al especialista');
-        });
-      }
-      this.auth.registrarFireAuth(
-        persona,
-        this.frmDatosPersonales.controls['clave'].value
-      );
-      this.snackBar.succesSnackBar("se creó al " + (paciente?'paciente':'especialista') + " con exito!!", "Ok", 2000);
-      this.router.navigate(['/home']);
+    } else {
+      this.snackBar.succesSnackBar('hubo un error en algún campo ', 'Ok', 2000);
     }
   }
 
   stepperNext(frm: FormGroup, categoria: string) {
     if (frm.valid) {
       this.frmDatosPersonales = frm;
-      if (categoria == 'paciente') {
-        this.stepperPaciente.next();
-        this.pacienteStep = 1;
-      } else {
-        this.stepperEspecialista.next();
-        this.especialistaStep = 1;
+      switch (categoria) {
+        case 'paciente':
+          this.stepperPaciente.next();
+          this.pacienteStep = 1;
+          break;
+        case 'especialista':
+          this.stepperEspecialista.next();
+          this.especialistaStep = 1;
+          break;
+        case 'admin':
+          this.stepperAdmin.next();
+          this.adminStep = 1;
+          break;
       }
     }
   }
   stepperPrevious(categoria: string) {
-    if (categoria == 'paciente') {
-      this.stepperPaciente.previous();
-      this.pacienteStep = 0;
-    } else {
-      this.stepperEspecialista.next();
-      this.especialistaStep = 0;
+    switch (categoria) {
+      case 'paciente':
+        this.stepperPaciente.previous();
+        this.pacienteStep = 0;
+        break;
+      case 'especialista':
+        this.stepperEspecialista.previous();
+        this.especialistaStep = 0;
+        break;
+      case 'admin':
+        this.stepperAdmin.previous();
+        this.adminStep = 0;
+        break;
     }
   }
-  handlePic(file: File, tipoFoto: string, paciente: boolean) {
+  handlePic(file: File, tipoFoto: string, categoria: string) {
     this.storage
       .subirArchivo(
         file,
-        paciente ? Rutas.Pacientes : Rutas.Especialistas,
+        categoria == 'paciente'
+          ? Rutas.Pacientes
+          : categoria == 'espcialista'
+          ? Rutas.Especialistas
+          : Rutas.Admin,
         `${tipoFoto}-${this.frmDatosPersonales.controls['nombre'].value}-${this.frmDatosPersonales.controls['apellido'].value}-${this.frmDatosPersonales.controls['DNI'].value}`
       )
       .then((r) => {
@@ -156,5 +217,4 @@ export class RegistroComponent implements OnInit {
         }
       });
   }
-
 }

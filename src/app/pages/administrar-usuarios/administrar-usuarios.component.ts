@@ -1,72 +1,61 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { Colecciones, DatabaseService } from '../../services/database.service';
-import { Persona } from '../../classes/persona';
 import { Especialista } from '../../classes/especialista';
 import { Paciente } from '../../classes/paciente';
 import {MatSlideToggleChange, MatSlideToggleModule} from '@angular/material/slide-toggle';
-import { AuthService } from '../../services/auth.service';
-
-export interface elementoTabla {
-  Nombre: string;
-  Apellido: string;
-  Edad: number;
-  DNI: number;
-}
-// Correo: string;
+import { RegistroComponent } from '../registro/registro.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { Admin } from '../../classes/admin';
 
 @Component({
   selector: 'app-administrar-usuarios',
   standalone: true,
-  imports: [MatTableModule, MatSlideToggleModule],
+  imports: [MatTableModule, MatSlideToggleModule, RegistroComponent, MatProgressSpinnerModule],
   templateUrl: './administrar-usuarios.component.html',
   styleUrl: './administrar-usuarios.component.scss',
 })
 export class AdministrarUsuariosComponent implements OnInit {
-  // especialistas!: Especialista[];
-  // pacientes!: Paciente[];
-  // displayedColumns: string[] = ['Nombre', 'Apellido', 'Edad', 'DNI', 'Correo'];
-  // displayedColumns: string[] = ['Nombre', 'Apellido', 'Edad', 'DNI'];
+  displayedColumnsEspecialista: string[] = [
+    'Nombre',
+    'Apellido',
+    'Dni',
+    'Edad',
+    'Correo',
+    'Especialidad',
+    'Autorizado'
+  ]
+  // 'FotosUrl',
+  displayedColumnsPaciente: string[] = [
+    'Nombre',
+    'Apellido',
+    'Dni',
+    'Edad',
+    'Correo',
+    'Obra social'
+  ]
+  displayedColumnsAdmin: string[] = [
+    'Nombre',
+    'Apellido',
+    'Dni',
+    'Edad',
+    'Correo'
+  ]
 
-  especialistas: Especialista[] = [];
-  pacientes: Paciente[] = [];
-
-  ELEMENT_DATA: elementoTabla[] = [];
+  ELEMENT_DATA_especialista: Especialista[] = [];
+  ELEMENT_DATA_paciente: Paciente[] = [];
+  ELEMENT_DATA_admin: Admin[] = [];
 
   constructor(private db: DatabaseService) {}
+
   ngOnInit(): void {
-    /*
-    this.db.traerColeccion<Persona>(Colecciones.Personas).then((r) => {
-      this.personas = r;
-      this.personas.forEach((p) => {
-        this.ELEMENT_DATA.push({
-          Nombre: p.nombre,
-          Apellido: p.apellido,
-          Edad: Number(p.edad),
-          DNI: Number(p.dni),
-        });
-        // Correo : p.correo,
-      });
-      });
-    */
-
-    this.db.traerColeccion<Especialista>(Colecciones.Especialistas).then((r) => {
-      this.especialistas = r;
-    });
-
-    // this.db.traerColeccion<Especialista>(Colecciones.Especialistas).then((r) => {
-    //   this.especialistas = r;
-    // });
-
-    this.db.traerColeccion<Persona>(Colecciones.Personas).then((r) => {
-      r.forEach( p => {
-        if(p.tipoUsuario != 'especialista'){
-          // this.pacientes.push(p);
-        }
-      })
-    });
+    this.db.escucharColeccion(Colecciones.Especialistas, this.ELEMENT_DATA_especialista);
+    this.db.escucharColeccion(Colecciones.Pacientes, this.ELEMENT_DATA_paciente);
+    this.db.escucharColeccion(Colecciones.Personas, this.ELEMENT_DATA_admin, ( p => {
+      return p.tipoUsuario == 'admin'
+    }));
   }
-  // dataSource = this.personas;
+  
   autorizar(click: MatSlideToggleChange, especialista: Especialista){
     this.db.actualizarDoc(Colecciones.Especialistas, especialista.id, {autorizado: click.checked});
   }
