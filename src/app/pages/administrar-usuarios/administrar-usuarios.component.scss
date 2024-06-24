@@ -3,13 +3,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  #tablas {
-    margin-top: 30rem;
-    h2 {
-      margin: 1rem;
+
+  #tablas{
+    .tabla{
+      margin: 3rem 0;
     }
-  }
-  #app-registro-container {
-    margin-top: 2rem;
   }
 }

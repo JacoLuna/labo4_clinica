@@ -3,12 +3,14 @@ import {
   Auth,
   User as FireUser,
   createUserWithEmailAndPassword,
+  getAuth,
   signInWithEmailAndPassword,
   updateCurrentUser,
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 import { Colecciones, DatabaseService } from './database.service';
 import { Persona } from '../classes/persona';
+import { initializeApp } from 'firebase/app';
 // import { ErrorCodes, Exception } from '../utils/clases/exception';
 
 @Injectable({
@@ -58,21 +60,32 @@ export class AuthService {
    */
   async registrarFireAuth(usuario: Persona, contr: string): Promise<string> {
     try {
-      const fireUserViejo = JSON.parse(sessionStorage.getItem('fireUser')!) as FireUser;
+      const ssFireUser = sessionStorage.getItem('fireUser');
+      const fireUserViejo: FireUser | null = ssFireUser ? JSON.parse(ssFireUser) : null;
 
-      // await this.db.buscarPersonaPorDni(usuario.dni); // Tira Error si no encuentra el DNI
+      // await this.db.buscarUsuarioPorDni(usuario.dni) // Tira Error si no encuentra el DNI
+      //   .catch((error: Exception) => {
+      //     if (error.code !== ErrorCodes.DniNoRegistrado) // Si el error no es sobre el DNI no encontrado, lo tira de nuevo.
+      //       throw error;
+      //   });
 
-      await createUserWithEmailAndPassword(this.auth, usuario.correo, contr).then(
-        async () => {
-        if (!fireUserViejo) { // Si no hay nadie logueado
-          this.UsuarioEnSesion = usuario;
-        } else { // Si existe, un empleado registra a alguien nuevo.
-          await updateCurrentUser(this.auth, fireUserViejo);
-        }
-      }).catch( e => {
-        // console.log(e);
-      });
+      const authInst = !fireUserViejo ? this.auth : getAuth(
+        initializeApp({
+          projectId: 'lab4lunajaco',
+          appId: '1:85267814802:web:00d2f43a8038fa48f2c94b',
+          storageBucket: 'lab4lunajaco.appspot.com',
+          apiKey: 'AIzaSyCFt1PlKZDi1248k-EjAhUaI521JeFKMsw',
+          authDomain: 'lab4lunajaco.firebaseapp.com',
+          messagingSenderId: '85267814802',
+        },"Secondary"));
+      await createUserWithEmailAndPassword(authInst, usuario.correo, contr);
+
       const docId = await this.db.subirDoc(Colecciones.Personas, usuario, true);
+      usuario.id = docId;
+
+      if (!fireUserViejo)
+        this.UsuarioEnSesion = usuario;
+
       return docId;
     } catch (error: any) {
       error.message = this.parsearError(error);

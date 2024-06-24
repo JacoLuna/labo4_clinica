@@ -1,0 +1,24 @@
+.container{
+    display: flex;
+    align-items: center;
+    width: 100vh;
+    height: 100vh;
+
+    mat-card-content{
+      .informacion{
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: row;
+        mat-form-field{
+          width: 46%;
+
+          input:disabled{
+            color: black;
+          }
+        }
+        #email{
+          width: 95%;
+        }
+      }
+    }
+}

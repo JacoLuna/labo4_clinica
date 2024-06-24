@@ -1,5 +1,12 @@
 div {
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
   box-sizing: border-box;
+
   mat-stepper {
     display: flex;
     form {
@@ -12,11 +19,12 @@ div {
   }
 
   #acceso-rapido-container {
+    display: flex;
+    flex-direction: column;
     position: absolute;
     left: 1%;
     bottom: 1%;
-    display: flex;
-    flex-direction: column;
+    height: fit-content;
     button {
       background-color: transparent;
       width: 75px;

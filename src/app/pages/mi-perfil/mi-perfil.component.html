@@ -1,0 +1,43 @@
+<div class="container">
+    <mat-card class="card" appearance="outlined">
+      <mat-card-header>
+        <img mat-card-avatar alt="imagen de avatar" 
+        [src]="auth.UsuarioEnSesion!.fotoUrl.length > 1?auth.UsuarioEnSesion!.fotoUrl[1]:auth.UsuarioEnSesion!.fotoUrl[0]" />
+        <mat-card-title>{{auth.UsuarioEnSesion!.nombre}} {{auth.UsuarioEnSesion!.apellido}}</mat-card-title>
+        <mat-card-subtitle>{{especialista.especialidad}}</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image [src]="auth.UsuarioEnSesion!.fotoUrl" alt="foto de perfil">
+      <mat-card-content>
+        <h2>Información</h2>
+        <div class="informacion">
+          <mat-form-field class="form-field">
+            <input matInput type="text" [value]="auth.UsuarioEnSesion!.nombre" disabled> 
+          </mat-form-field>
+          <mat-form-field class="form-field">
+            <input matInput type="text" [value]="auth.UsuarioEnSesion!.apellido" disabled> 
+          </mat-form-field>
+        </div>
+        <div class="informacion">
+          <mat-form-field class="form-field">
+            <input matInput type="number" [value]="auth.UsuarioEnSesion!.dni" disabled> 
+          </mat-form-field>
+          <mat-form-field class="form-field">
+            <input matInput type="number" [value]="auth.UsuarioEnSesion!.edad" disabled> 
+          </mat-form-field>
+        </div>
+        <div class="informacion">
+          <mat-form-field id="email" class="form-field">
+            <input matInput type="email" [value]="auth.UsuarioEnSesion!.correo" disabled> 
+          </mat-form-field>
+        </div>
+        <h2>Especialidades</h2>
+        <div class="informacion">
+          <mat-list role="list">
+            <mat-list-item role="listitem">{{especialista.especialidad}}</mat-list-item>
+            <!-- <mat-list-item role="listitem">Item 2</mat-list-item>
+            <mat-list-item role="listitem">Item 3</mat-list-item> -->
+          </mat-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+</div>

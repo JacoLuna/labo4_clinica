@@ -1,4 +1,5 @@
-<mat-drawer-container class="container" autosize [hasBackdrop]="true">
+<mat-drawer-container class="container" [hasBackdrop]="true">
+  <!-- autosize -->
   <mat-drawer #drawer class="sidenav" mode="side">
     <div>
       <h2>
@@ -12,6 +13,14 @@
     @if (auth.UsuarioEnSesion) {
       <div>
         <button mat-stroked-button (click)="logOut()">Salir</button>
+      </div>
+
+      <div>
+        <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()"> Turnos </button>
+      </div>
+
+      <div>
+        <button mat-stroked-button routerLinkActive="active" routerLink="/perfil"> Perfil </button>
       </div>
     }@else {
       <div>
@@ -32,11 +41,6 @@
         </button>
       </div>
     }
-    <div>
-      <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()">
-        Turnos
-      </button>
-    </div>
     
   </mat-drawer>
   

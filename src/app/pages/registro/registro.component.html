@@ -1,119 +1,72 @@
-<mat-tab-group dynamicHeight selectedIndex="0" [ngClass]="!admin?'noAdmin':''">
-  <mat-tab label="Paciente">
-    <mat-vertical-stepper 
-      [linear]="true"
-      #stepperPaciente
-      [animationDuration]="duration"
-    >
-      <mat-step *ngIf="pacienteStep === 0">
-        <ng-template matStepLabel>Datos Personales</ng-template>
-        <app-form-datos-personales
-          (nextEvent)="stepperNext($event, 'paciente')"
-        ></app-form-datos-personales>
-      </mat-step>
-
-      <mat-step *ngIf="pacienteStep === 1">
-        <ng-template matStepLabel>Datos del paciente</ng-template>
-        <app-form-datos-especificos
-          (onPreviousEvent)="stepperPrevious('paciente')"
-        (onPicEvent)="handlePic($event[0], $event[1], 'paciente')"
-          (onNextEvent)="registrarPersona($event, 'paciente')"
-        ></app-form-datos-especificos>
-
-        @if(frmDatosPersonales){
-        <div id="card-container">
-          <mat-card class="card">
-            <mat-card-header>
-              @if(urlAvatar != ""){
-              <img mat-card-avatar alt="imagen de avatar" [src]="urlAvatar" />
-              <!-- [src]="categoria == 'paciente' ? urlAvatar : urlPerfil" -->
-              }
-              <mat-card-title
-                >{{ frmDatosPersonales.controls["nombre"].value }}
-                {{
-                  frmDatosPersonales.controls["apellido"].value
-                }}</mat-card-title
-              >
-            </mat-card-header>
-            @if(urlPerfil != ""){
-            <img
-              mat-card-image
-              [src]="urlPerfil"
-              alt="imagen de perfil"
-              id="fotoPerfil"
-            />
-            }
-          </mat-card>
-        </div>
-        }
-      </mat-step>
-    </mat-vertical-stepper>
-  </mat-tab>
-  <mat-tab label="Especialista">
-    <mat-vertical-stepper
-      [linear]="true"
-      #stepperEspecialista
-      [animationDuration]="duration"
-    >
-      <mat-step *ngIf="especialistaStep === 0">
-        <ng-template matStepLabel>Datos del especialista</ng-template>
-        <app-form-datos-personales (nextEvent)="stepperNext($event, 'especialista')"></app-form-datos-personales>
-      </mat-step>
-
-      <mat-step *ngIf="especialistaStep === 1">
-        <app-form-datos-especificos
-          categoria="especialista"
-          (onPreviousEvent)="stepperPrevious('especialista')"
-          (onPicEvent)="handlePic($event[0], $event[1], 'especialista')"
-          (onNextEvent)="registrarPersona($event, 'especialista')"
-        ></app-form-datos-especificos>
-
-        @if(frmDatosPersonales){
-        <div id="card-container">
-          <mat-card class="card">
-            <mat-card-header>
-              @if(urlPerfil != ""){
-              <img mat-card-avatar alt="imagen de avatar" [src]="urlPerfil" />
-              }
-              <mat-card-title
-                >{{ frmDatosPersonales.controls["nombre"].value }}
-                {{
-                  frmDatosPersonales.controls["apellido"].value
-                }}</mat-card-title
-              >
-            </mat-card-header>
-            @if(urlPerfil != ""){
-            <img
-              mat-card-image
-              [src]="urlPerfil"
-              alt="imagen de perfil"
-              id="fotoPerfil"
-            />
-            }
-          </mat-card>
-        </div>
-        }
-      </mat-step>
-    </mat-vertical-stepper>
-  </mat-tab>
-  @if (admin) {
-    <mat-tab label="Admin">
-      <mat-vertical-stepper
+<div class="container">
+  <mat-tab-group dynamicHeight selectedIndex="0" [ngClass]="!admin?'noAdmin':''">
+    <mat-tab label="Paciente">
+      <mat-vertical-stepper 
         [linear]="true"
-        #stepperAdmin
+        #stepperPaciente
         [animationDuration]="duration"
       >
-        <mat-step *ngIf="adminStep === 0">
-          <ng-template matStepLabel>Datos del administrador</ng-template>
-          <app-form-datos-personales (nextEvent)="stepperNext($event, 'admin')"></app-form-datos-personales>
+        <mat-step *ngIf="pacienteStep === 0">
+          <ng-template matStepLabel>Datos Personales</ng-template>
+          <app-form-datos-personales
+            (nextEvent)="stepperNext($event, 'paciente')"
+          ></app-form-datos-personales>
         </mat-step>
   
-        <mat-step *ngIf="adminStep === 1">
+        <mat-step *ngIf="pacienteStep === 1">
+          <ng-template matStepLabel>Datos del paciente</ng-template>
           <app-form-datos-especificos
-            categoria="admin"
-            (onPreviousEvent)="stepperPrevious('admin')"
-            (onPicEvent)="handlePic($event[0], $event[1], 'admin')"
-            (onNextEvent)="registrarPersona($event, 'admin')"
+            (onPreviousEvent)="stepperPrevious('paciente')"
+          (onPicEvent)="handlePic($event[0], $event[1], 'paciente')"
+            (onNextEvent)="registrarPersona($event, 'paciente')"
+          ></app-form-datos-especificos>
+  
+          @if(frmDatosPersonales){
+          <div id="card-container">
+            <mat-card class="card">
+              <mat-card-header>
+                @if(urlAvatar != ""){
+                <img mat-card-avatar alt="imagen de avatar" [src]="urlAvatar" />
+                <!-- [src]="categoria == 'paciente' ? urlAvatar : urlPerfil" -->
+                }
+                <mat-card-title
+                  >{{ frmDatosPersonales.controls["nombre"].value }}
+                  {{
+                    frmDatosPersonales.controls["apellido"].value
+                  }}</mat-card-title
+                >
+              </mat-card-header>
+              @if(urlPerfil != ""){
+              <img
+                mat-card-image
+                [src]="urlPerfil"
+                alt="imagen de perfil"
+                id="fotoPerfil"
+              />
+              }
+            </mat-card>
+          </div>
+          }
+        </mat-step>
+      </mat-vertical-stepper>
+    </mat-tab>
+    <mat-tab label="Especialista">
+      <mat-vertical-stepper
+        [linear]="true"
+        #stepperEspecialista
+        [animationDuration]="duration"
+      >
+        <mat-step *ngIf="especialistaStep === 0">
+          <ng-template matStepLabel>Datos del especialista</ng-template>
+          <app-form-datos-personales (nextEvent)="stepperNext($event, 'especialista')"></app-form-datos-personales>
+        </mat-step>
+  
+        <mat-step *ngIf="especialistaStep === 1">
+          <app-form-datos-especificos
+            categoria="especialista"
+            (onPreviousEvent)="stepperPrevious('especialista')"
+            (onPicEvent)="handlePic($event[0], $event[1], 'especialista')"
+            (onNextEvent)="registrarPersona($event, 'especialista')"
           ></app-form-datos-especificos>
   
           @if(frmDatosPersonales){
@@ -144,5 +97,54 @@
         </mat-step>
       </mat-vertical-stepper>
     </mat-tab>
-  }
-</mat-tab-group>
+    @if (admin) {
+      <mat-tab label="Admin">
+        <mat-vertical-stepper
+          [linear]="true"
+          #stepperAdmin
+          [animationDuration]="duration"
+        >
+          <mat-step *ngIf="adminStep === 0">
+            <ng-template matStepLabel>Datos del administrador</ng-template>
+            <app-form-datos-personales (nextEvent)="stepperNext($event, 'admin')"></app-form-datos-personales>
+          </mat-step>
+    
+          <mat-step *ngIf="adminStep === 1">
+            <app-form-datos-especificos
+              categoria="admin"
+              (onPreviousEvent)="stepperPrevious('admin')"
+              (onPicEvent)="handlePic($event[0], $event[1], 'admin')"
+              (onNextEvent)="registrarPersona($event, 'admin')"
+            ></app-form-datos-especificos>
+    
+            @if(frmDatosPersonales){
+            <div id="card-container">
+              <mat-card class="card">
+                <mat-card-header>
+                  @if(urlPerfil != ""){
+                  <img mat-card-avatar alt="imagen de avatar" [src]="urlPerfil" />
+                  }
+                  <mat-card-title
+                    >{{ frmDatosPersonales.controls["nombre"].value }}
+                    {{
+                      frmDatosPersonales.controls["apellido"].value
+                    }}</mat-card-title
+                  >
+                </mat-card-header>
+                @if(urlPerfil != ""){
+                <img
+                  mat-card-image
+                  [src]="urlPerfil"
+                  alt="imagen de perfil"
+                  id="fotoPerfil"
+                />
+                }
+              </mat-card>
+            </div>
+            }
+          </mat-step>
+        </mat-vertical-stepper>
+      </mat-tab>
+    }
+  </mat-tab-group>
+</div>

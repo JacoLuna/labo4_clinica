@@ -19,7 +19,7 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('./pages/login/login.component').then((m) => m.LoginComponent),
-    ...canActivate(() => redirectLoggedInTo(['/home'])),
+    canActivate: [() => redirectLoggedInTo(['/home'])],
   },
   {
     path: 'registrarse',
@@ -27,7 +27,7 @@ export const routes: Routes = [
       import('./pages/registro/registro.component').then(
         (m) => m.RegistroComponent
       ),
-    ...canActivate(() => redirectLoggedInTo(['/home'])),
+      canActivate: [() => redirectLoggedInTo(['/home'])],
   },
   {
     path: 'administrar-usuarios',
@@ -42,6 +42,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent),
     canActivate: [authorizedGuard, () => redirectUnauthorizedTo(['/home'])],
+  },
+  {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./pages/mi-perfil/mi-perfil.component').then((m) => m.MiPerfilComponent),
+    canActivate: [() => redirectUnauthorizedTo(['/home'])],
   },
   { path: '**', component: HomeComponent },
 ];

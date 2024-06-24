@@ -39,7 +39,7 @@ $clinicaonline-theme: mat.define-light-theme(
 @import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap");
 @import "app/theme/variables.scss";
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
-
+@import "app/theme/variables.scss";
 
 * {
   font-family: "Comfortaa", sans-serif;
@@ -53,4 +53,12 @@ body {
 html,
 body {
   height: 100%;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+}
+.background-pri {
+  background-color: $color-bg;
 }
