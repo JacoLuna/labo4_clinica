@@ -106,6 +106,7 @@ export class AuthService {
     try {
       await signInWithEmailAndPassword(this.auth, email, contr);
       const objUsuario = await this.db.buscarPersonaPorCorreo(this.auth.currentUser?.email!)
+      console.log(objUsuario);
       this.UsuarioEnSesion = objUsuario;
     } catch (error: any) {
       error.message = this.parsearError(error);

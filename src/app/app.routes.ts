@@ -9,7 +9,6 @@ import { authorizedGuard } from './guards/authorized.guard';
 import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
-  //   { path: 'logIn', component: LoginComponent },
   {
     path: 'Home',
     loadComponent: () =>
@@ -38,16 +37,16 @@ export const routes: Routes = [
     canActivate: [adminGuard],
   },
   {
-    path: 'turnos',
-    loadComponent: () =>
-      import('./pages/turnos/turnos.component').then((m) => m.TurnosComponent),
-    canActivate: [authorizedGuard, () => redirectUnauthorizedTo(['/home'])],
-  },
-  {
     path: 'perfil',
     loadComponent: () =>
       import('./pages/mi-perfil/mi-perfil.component').then((m) => m.MiPerfilComponent),
     canActivate: [() => redirectUnauthorizedTo(['/home'])],
+  },
+  {
+    path: 'solicitar-turno',
+    loadComponent: () =>
+      import('./pages/solicitar-turnos/solicitar-turnos.component').then((m) => m.SolicitarTurnosComponent),
+      canActivate: [() => redirectUnauthorizedTo(['/home'])],
   },
   { path: '**', component: HomeComponent },
 ];

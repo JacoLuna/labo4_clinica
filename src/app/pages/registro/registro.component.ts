@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild,} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,12 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup,} from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Rutas, StorageService } from '../../services/storage.service';
@@ -112,7 +101,7 @@ export class RegistroComponent implements OnInit {
             Number(this.frmDatosPersonales.controls['edad'].value),
             this.urlPerfil,
             this.frmDatosPersonales.controls['email'].value,
-            frmDatosEspecificos.controls['especialidad'].value.nombre
+            frmDatosEspecificos.controls['especialidades'].value
           );
           break;
         case 'admin':
@@ -133,14 +122,14 @@ export class RegistroComponent implements OnInit {
         .then(() => {
           switch (categoria) {
             case 'paciente':
-              this.bd.subirDoc(Colecciones.Pacientes, persona);
+              // this.bd.subirDoc(Colecciones.Pacientes, persona);
               this.snackBar.succesSnackBar(
                 'se creó al paciente con exito!!','Ok',
                 2000
               );
               break;
             case 'especialista':
-              this.bd.subirDoc(Colecciones.Especialistas, persona);
+              // this.bd.subirDoc(Colecciones.Especialistas, persona);
               this.snackBar.succesSnackBar(
                 'se creó al especialista con exito!!','Ok',
                 2000

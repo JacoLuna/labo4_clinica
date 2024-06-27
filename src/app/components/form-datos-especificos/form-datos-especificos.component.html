@@ -20,7 +20,7 @@
     @if (frmDatosEspecificosPaciente.controls['obraSocial'].dirty &&
     frmDatosEspecificosPaciente.controls['obraSocial'].errors) { @if
     (frmDatosEspecificosPaciente.controls['obraSocial'].errors!['required']) {
-    <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+      <mat-error>{{ errrorCampoObligatorio }}</mat-error>
     } }
   </mat-form-field>
   }
@@ -90,54 +90,45 @@
 </form>
 }@else if(categoria == 'especialista'){
 <form [formGroup]="frmDatosEspecificosEspecialista">
-  @if(!addEsp){ @if(optionsEspecialidad.length > 0){
-  <mat-icon
-    id="tooltip"
-    matTooltip="agregar especialidad"
-    matTooltipPosition="below"
-    matTooltipHideDelay="1000"
-    (click)="addEspecialidad()"
-    >add</mat-icon
-  >
+    <!-- @if(optionsEspecialidad.length > 0){ -->
 
-  <mat-form-field id="buscador" class="example-full-width">
-    <mat-label>Especialidad</mat-label>
-    <input
-      type="text"
-      matInput
-      formControlName="especialidad"
-      [matAutocomplete]="auto"
-      name="busqueda"
-    />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-      @for (option of filteredEspecialidades | async; track option) {
-      <mat-option [value]="option">{{ option.nombre }}</mat-option>
+    <mat-form-field class="example-chip-list">
+      <mat-label>Especialidad</mat-label>
+      <mat-chip-grid #chipGrid aria-label="Fruit selection">
+        @for (especialidad of especialidades(); track $index) {
+          <mat-chip-row (removed)="remove(especialidad)">
+            {{especialidad}}
+            <button matChipRemove [attr.aria-label]="'remove ' + especialidad">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        }
+      </mat-chip-grid>
+      <input
+        name="busqueda"
+        placeholder="especialidad..."
+        formControlName="especialidades"
+        #fruitInput
+        [(ngModel)]="currentEspecialidad"
+        [matChipInputFor]="chipGrid"
+        [matAutocomplete]="auto"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)"
+        />
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="selected($event)">
+        @for (option of filteredEspecialidades | async; track option) {
+        <mat-option [value]="option">{{ option.nombre }}</mat-option>
+        }
+      </mat-autocomplete>
+      @if
+      (frmDatosEspecificosEspecialista.controls['especialidades'].dirty && frmDatosEspecificosEspecialista.controls['especialidades'].errors) { 
+        @if
+        (frmDatosEspecificosEspecialista.controls['especialidades'].errors!['required']) {
+          <mat-error>{{ errrorCampoObligatorio }}</mat-error>
+        }  
       }
-    </mat-autocomplete>
-
-    @if (frmDatosEspecificosEspecialista.controls['especialidad'].dirty &&
-    frmDatosEspecificosEspecialista.controls['especialidad'].errors) { @if
-    (frmDatosEspecificosEspecialista.controls['especialidad'].errors!['required'])
-    {
-    <mat-error>{{ errrorCampoObligatorio }}</mat-error>
-    } }
-  </mat-form-field>
-  } }@else{
-  <mat-icon
-    id="tooltip"
-    matTooltip="no agregar"
-    matTooltipPosition="below"
-    matTooltipHideDelay="1000"
-    (click)="addEspecialidad()"
-    >remove</mat-icon
-  >
-  <mat-form-field>
-    <mat-label>Especialidad</mat-label>
-    <input matInput type="text" formControlName="especialidad" />
-  </mat-form-field>
-
-  }
-
+    </mat-form-field>
+  
   <button
     type="button"
     mat-raised-button

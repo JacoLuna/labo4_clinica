@@ -5,8 +5,8 @@ import { Especialista } from '../classes/especialista';
 // import { ErrorCodes, Exception } from '../utils/clases/exception';
 
 export enum Colecciones {
-  Pacientes = 'pacientes',
-  Especialistas = 'especialistas',
+  // Pacientes = 'pacientes',
+  // Especialistas = 'especialistas',
   Personas = 'persona',
   Especialidades = 'especialidades',
   ObrasSociales = 'obrasSociales',
@@ -162,12 +162,12 @@ export class DatabaseService {
     // if (index === -1) throw new Exception(ErrorCodes.CorreoNoRegistrado, 'Esta dirección de correo no está registrada.');
     return Personas[index];
   }
-  async buscarEspecialistaPorCorreo(correo: string): Promise<Especialista> {
-    const Especialistas = await this.traerColeccion<Especialista>(Colecciones.Especialistas);
-    const index = Especialistas.findIndex(u => u.correo === correo);
-    // if (index === -1) throw new Exception(ErrorCodes.CorreoNoRegistrado, 'Esta dirección de correo no está registrada.');
-    return Especialistas[index];
-  }
+  // async buscarEspecialistaPorCorreo(correo: string): Promise<Especialista> {
+  //   const Especialistas = await this.traerColeccion<Especialista>(Colecciones.Especialistas);
+  //   const index = Especialistas.findIndex(u => u.correo === correo);
+  //   // if (index === -1) throw new Exception(ErrorCodes.CorreoNoRegistrado, 'Esta dirección de correo no está registrada.');
+  //   return Especialistas[index];
+  // }
 
   /**
    * Busca el Persona que tenga registrado su DNI con el parámetro de búsqueda.

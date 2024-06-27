@@ -15,9 +15,11 @@
         <button mat-stroked-button (click)="logOut()">Salir</button>
       </div>
 
-      <div>
-        <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()"> Turnos </button>
-      </div>
+      @if (auth.UsuarioEnSesion!.tipoUsuario != 'especialista') {
+        <div>
+          <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()"> Turnos </button>
+        </div>
+      }
 
       <div>
         <button mat-stroked-button routerLinkActive="active" routerLink="/perfil"> Perfil </button>

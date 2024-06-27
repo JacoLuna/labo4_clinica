@@ -1,43 +1,125 @@
 <div class="container">
-    <mat-card class="card" appearance="outlined">
-      <mat-card-header>
-        <img mat-card-avatar alt="imagen de avatar" 
-        [src]="auth.UsuarioEnSesion!.fotoUrl.length > 1?auth.UsuarioEnSesion!.fotoUrl[1]:auth.UsuarioEnSesion!.fotoUrl[0]" />
-        <mat-card-title>{{auth.UsuarioEnSesion!.nombre}} {{auth.UsuarioEnSesion!.apellido}}</mat-card-title>
-        <mat-card-subtitle>{{especialista.especialidad}}</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image [src]="auth.UsuarioEnSesion!.fotoUrl" alt="foto de perfil">
-      <mat-card-content>
-        <h2>Información</h2>
-        <div class="informacion">
-          <mat-form-field class="form-field">
-            <input matInput type="text" [value]="auth.UsuarioEnSesion!.nombre" disabled> 
-          </mat-form-field>
-          <mat-form-field class="form-field">
-            <input matInput type="text" [value]="auth.UsuarioEnSesion!.apellido" disabled> 
-          </mat-form-field>
-        </div>
-        <div class="informacion">
-          <mat-form-field class="form-field">
-            <input matInput type="number" [value]="auth.UsuarioEnSesion!.dni" disabled> 
-          </mat-form-field>
-          <mat-form-field class="form-field">
-            <input matInput type="number" [value]="auth.UsuarioEnSesion!.edad" disabled> 
-          </mat-form-field>
-        </div>
-        <div class="informacion">
-          <mat-form-field id="email" class="form-field">
-            <input matInput type="email" [value]="auth.UsuarioEnSesion!.correo" disabled> 
-          </mat-form-field>
-        </div>
-        <h2>Especialidades</h2>
-        <div class="informacion">
-          <mat-list role="list">
-            <mat-list-item role="listitem">{{especialista.especialidad}}</mat-list-item>
-            <!-- <mat-list-item role="listitem">Item 2</mat-list-item>
-            <mat-list-item role="listitem">Item 3</mat-list-item> -->
-          </mat-list>
-        </div>
-      </mat-card-content>
-    </mat-card>
+  <mat-card class="card" appearance="outlined">
+    <mat-card-header>
+      <img
+        mat-card-avatar
+        alt="imagen de avatar"
+        [src]="
+          auth.UsuarioEnSesion!.fotoUrl.length > 1
+            ? auth.UsuarioEnSesion!.fotoUrl[1]
+            : auth.UsuarioEnSesion!.fotoUrl[0]
+        "
+      />
+      <mat-card-title
+        >{{ auth.UsuarioEnSesion!.nombre }}
+        {{ auth.UsuarioEnSesion!.apellido }}</mat-card-title
+      >
+      <mat-card-subtitle>{{
+        auth.UsuarioEnSesion?.tipoUsuario
+      }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group dynamicHeight>
+        <mat-tab label="Datos Personales">
+          <div id="img">
+            <img
+              mat-card-image
+              [src]="auth.UsuarioEnSesion!.fotoUrl"
+              alt="foto de perfil"
+            />
+          </div>
+          <div id="informacion-container">
+            <h2>Información</h2>
+            <div class="informacion">
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [value]="auth.UsuarioEnSesion!.nombre"
+                  disabled
+                />
+              </mat-form-field>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="text"
+                  [value]="auth.UsuarioEnSesion!.apellido"
+                  disabled
+                />
+              </mat-form-field>
+            </div>
+            <div class="informacion">
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="number"
+                  [value]="auth.UsuarioEnSesion!.dni"
+                  disabled
+                />
+              </mat-form-field>
+              <mat-form-field class="form-field">
+                <input
+                  matInput
+                  type="number"
+                  [value]="auth.UsuarioEnSesion!.edad"
+                  disabled
+                />
+              </mat-form-field>
+            </div>
+            <div class="informacion">
+              <mat-form-field id="email" class="form-field">
+                <input
+                  matInput
+                  type="email"
+                  [value]="auth.UsuarioEnSesion!.correo"
+                  disabled
+                />
+              </mat-form-field>
+            </div>
+            @if (auth.UsuarioEnSesion!.tipoUsuario != 'admin') {
+              @if (auth.UsuarioEnSesion!.tipoUsuario == 'especialista') {
+                <h2>Especialidades</h2>
+              }@else{
+                <h2>Paciente</h2>  
+              }
+              <div class="informacion">
+                <mat-list role="list">
+                  @if (especialista) {
+                    @for (especialidad of especialista.especialidades; track $index) {
+                      <mat-list-item role="listitem">{{especialidad}}</mat-list-item>
+                    }
+                  } @if (paciente) {
+                  <mat-list-item role="listitem">{{
+                    paciente.obraSocial
+                  }}</mat-list-item>
+                  }
+                </mat-list>
+              </div>
+            }
+          </div>
+        </mat-tab>
+        <mat-tab label="Mis Horarios" *ngIf="especialista">
+
+          <section id="horarios">
+            <div class="label">Horarios</div>
+            <div class="horas-container">
+              @if(!cargando){
+                @for (hs of horarios; track $index) {
+                  @if (!hs.seleccionado) {
+                    <button class="hora" mat-stroked-button (click)="seleccionarHorario($index)">{{hs.horario}}</button>
+                  }@else {
+                    <button class="hora" mat-flat-button color="primary" (click)="seleccionarHorario($index)">{{hs.horario}}</button>  
+                  }
+                }
+              }@else {
+                <mat-spinner></mat-spinner>
+              }
+            </div>
+            <button mat-stroked-button id="btn-actualizar" [disabled]="!cambio" (click)="actualizarHorarios()">Actualizar</button>
+          </section>
+
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
 </div>

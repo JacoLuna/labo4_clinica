@@ -4,20 +4,56 @@
     width: 100vh;
     height: 100vh;
 
-    mat-card-content{
-      .informacion{
-        display: flex;
-        justify-content: space-evenly;
-        flex-direction: row;
-        mat-form-field{
-          width: 46%;
-
-          input:disabled{
-            color: black;
+    .card{
+      width: 100%;
+      
+      mat-card-content{
+          
+        #img{
+          width: 50%;
+          img{
+            width: 100%;
           }
         }
-        #email{
-          width: 95%;
+        #informacion-container{
+          .informacion{
+            display: flex;
+            justify-content: space-evenly;
+            flex-direction: row;
+            mat-form-field{
+              width: 46%;
+    
+              input:disabled{
+                color: black;
+              }
+            }
+            #email{
+              width: 95%;
+            }
+          }
+        }
+      }
+
+      #horarios{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .horas-container{
+          // margin: auto;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+          justify-self: center;
+          flex-wrap: wrap;
+          // width: 80%;
+          .hora{
+            width: 50px;
+            margin: 1rem;
+          }
+        }
+        #btn-actualizar{
+          align-self: center;
+          width: 8rem;
         }
       }
     }

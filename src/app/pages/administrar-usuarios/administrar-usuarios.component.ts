@@ -49,14 +49,18 @@ export class AdministrarUsuariosComponent implements OnInit {
   constructor(private db: DatabaseService) {}
 
   ngOnInit(): void {
-    this.db.escucharColeccion(Colecciones.Especialistas, this.ELEMENT_DATA_especialista);
-    this.db.escucharColeccion(Colecciones.Pacientes, this.ELEMENT_DATA_paciente);
+    this.db.escucharColeccion(Colecciones.Personas, this.ELEMENT_DATA_especialista, ( p => {
+      return p.tipoUsuario == 'especialista'
+    }));
+    this.db.escucharColeccion(Colecciones.Personas, this.ELEMENT_DATA_paciente, ( p => {
+      return p.tipoUsuario == 'paciente'
+    }));
     this.db.escucharColeccion(Colecciones.Personas, this.ELEMENT_DATA_admin, ( p => {
       return p.tipoUsuario == 'admin'
     }));
   }
   
   autorizar(click: MatSlideToggleChange, especialista: Especialista){
-    this.db.actualizarDoc(Colecciones.Especialistas, especialista.id, {autorizado: click.checked});
+    this.db.actualizarDoc(Colecciones.Personas, especialista.id, {autorizado: click.checked});
   }
 }

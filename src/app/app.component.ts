@@ -38,8 +38,9 @@ export class AppComponent implements OnInit{
 
   logOut() {
     this.auth.signOut();
+    this.router.navigate(['/home']);
   }
   manageTurnos(){
-    this.router.navigate(['/turnos']);
+    this.router.navigate(['/solicitar-turno']);
   }
 }
