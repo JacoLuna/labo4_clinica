@@ -10,48 +10,20 @@
                   type="text"
                   matInput
                   formControlName="especialidad"
-                  [matAutocomplete]="autoEspecialidad"
                   name="busqueda"
                 />
-                <mat-autocomplete #autoEspecialidad="matAutocomplete" [displayWith]="displayEspecialidadesFn">
-                  @if(filteredEspecialidadesByUser){
-                    @for (option of filteredEspecialidades | async; track option) {
-                        <mat-option [value]="option" (onSelectionChange)="especialidadSelected($event)" >{{ option.nombre }}</mat-option>
-                      }
-                  }@else {
-                      @for (option of filteredEspecialidades | async; track option) {
-                        <mat-option [value]="option" (onSelectionChange)="especialidadSelected($event)" >{{ option.nombre }}</mat-option>
-                      }
-                  }
-                </mat-autocomplete>
-            
-                @if (frmTurno.controls['especialidad'].dirty &&
-                frmTurno.controls['especialidad'].errors) { @if
-                (frmTurno.controls['especialidad'].errors!['required']) {
-                  <mat-error>campo obligatirio</mat-error>
-                } }
 
-              </mat-form-field>
+            </mat-form-field>
+
             <mat-form-field class="full-width buscador">
             <mat-label>Especialista</mat-label>
-            <input
-                type="text"
-                matInput
-                formControlName="especialista"
-                [matAutocomplete]="autoEspecialista"
-                name="busqueda"
-            />
-            <mat-autocomplete #autoEspecialista="matAutocomplete" [displayWith]="displayMedicosFn">
-                @for (option of filteredMedicos | async; track option) {
-                <mat-option [value]="option">{{ option.nombre }}</mat-option>
-                }
-            </mat-autocomplete>
-        
-            <!-- @if (frmDatosEspecificosPaciente.controls['obraSocial'].dirty &&
-            frmDatosEspecificosPaciente.controls['obraSocial'].errors) { @if
-            (frmDatosEspecificosPaciente.controls['obraSocial'].errors!['required']) {
-                <mat-error>{{ errrorCampoObligatorio }}</mat-error>
-            } } -->
+              <input
+              type="text"
+              matInput
+              formControlName="especialista"
+              name="busqueda"/>
+              
+              
             </mat-form-field>
         }
 
