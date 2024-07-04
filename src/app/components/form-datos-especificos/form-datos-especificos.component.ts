@@ -19,14 +19,8 @@ import { SnackBarService } from '../../services/snack-bar.service';
 import { MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER} from '@angular/cdk/keycodes';
-export interface obraSocial {
-  id: string;
-  nombre: string;
-}
-export interface especialidad {
-  id: string;
-  nombre: string;
-}
+import { Especialidad } from '../../classes/especialidad';
+import { ObraSocial } from '../../classes/obraSocial';
 
 @Component({
   selector: 'app-form-datos-especificos',
@@ -36,9 +30,7 @@ export interface especialidad {
   styleUrl: './form-datos-especificos.component.scss',
 })
 export class FormDatosEspecificosComponent {
-  @Output() onPicEvent = new EventEmitter<
-    [file: File, tipoFoto: string, paciente: boolean]
-  >();
+  @Output() onPicEvent = new EventEmitter<[file: File, tipoFoto: string, paciente: boolean]>();
   @Output() onNextEvent = new EventEmitter<FormGroup>();
   @Output() onPreviousEvent = new EventEmitter();
   @Input() categoria: string = 'paciente';
@@ -48,12 +40,11 @@ export class FormDatosEspecificosComponent {
   frmDatosEspecificosAdmin!: FormGroup;
   
   errrorCampoObligatorio = 'Este campo es obligatorio';
-  filteredObrasSociales!: Observable<obraSocial[]>;
-  filteredEspecialidades!: Observable<especialidad[]>;
+  filteredObrasSociales!: Observable<ObraSocial[]>;
+  filteredEspecialidades!: Observable<Especialidad[]>;
   
-  optionsObraSocial: obraSocial[] = [];
-  optionsEspecialidad: especialidad[] = [];
-  // optionsEspecialidad: string[] = [];
+  optionsObraSocial: ObraSocial[] = [];
+  optionsEspecialidad: Especialidad[] = [];
 
   imgPerfil!: File;
   imgAvatar!: File;
@@ -71,7 +62,7 @@ export class FormDatosEspecificosComponent {
     this.frmDatosEspecificosPaciente = this.formBuilder.group({
       fotoAvatar: new FormControl('', [Validators.required]),
       fotoPerfil: new FormControl('', [Validators.required]),
-      obraSocial: new FormControl<string | obraSocial>('', [Validators.required]),
+      obraSocial: new FormControl<string | ObraSocial>('', [Validators.required]),
     });
     this.frmDatosEspecificosEspecialista = this.formBuilder.group({
       fotoPerfil: new FormControl('', [Validators.required]),
@@ -81,47 +72,46 @@ export class FormDatosEspecificosComponent {
       fotoPerfil: new FormControl('', [Validators.required]),
     });
     
-    this.bd.traerColeccion<obraSocial>(Colecciones.ObrasSociales).then((r) => {
+    this.bd.traerColeccion<ObraSocial>(Colecciones.ObrasSociales).then((r) => {
       this.optionsObraSocial = r;
     });
-    this.bd
-      .traerColeccion<especialidad>(Colecciones.Especialidades)
-      .then((r) => {
-        r.forEach( e => {
-          this.optionsEspecialidad.push(e);
-        })
-      });
-    this.filteredObrasSociales = this.frmDatosEspecificosPaciente.controls[
-      'obraSocial'
-    ].valueChanges.pipe(
+
+    this.bd.traerColeccion<Especialidad>(Colecciones.Especialidades).then((r) => {
+      this.optionsEspecialidad = r;
+    });
+    this.filteredObrasSociales = this.frmDatosEspecificosPaciente.controls['obraSocial'].valueChanges.pipe(
       startWith(''),
       map((value) => {
         const nombre = typeof value === 'string' ? value : value?.nombre;
         return nombre
-          ? this._filter(nombre as string)
+          ? this._filterObraSocial(nombre as string)
           : this.optionsObraSocial.slice();
       })
     );
-
-    this.filteredEspecialidades = this.frmDatosEspecificosEspecialista.controls[
-      'especialidades'
-    ].valueChanges.pipe(
+    
+    this.filteredEspecialidades = this.frmDatosEspecificosEspecialista.controls['especialidades'].valueChanges.pipe(
       startWith(''),
       map((value) => {
         const nombre = typeof value === 'string' ? value : value?.nombre;
         return nombre
-          ? this._filter(nombre as string)
+          ? this._filterEspecialidad(nombre as string)
           : this.optionsEspecialidad.slice();
       })
     );
   }
 
-  displayFn(objeto: obraSocial | especialidad): string {
+  displayFn(objeto: ObraSocial | Especialidad): string {
     return objeto && objeto.nombre ? objeto.nombre : '';
   }
-  private _filter(nombre: string): obraSocial[] | especialidad[] {
+  private _filterObraSocial(nombre: string): ObraSocial[]{
     const filterValue = nombre.toLowerCase();
     return this.optionsObraSocial.filter((option) => {
+      return option.nombre.toLowerCase().includes(filterValue);
+    });
+  }
+  private _filterEspecialidad(nombre: string): Especialidad[] {
+    const filterValue = nombre.toLowerCase();
+    return this.optionsEspecialidad.filter((option) => {
       return option.nombre.toLowerCase().includes(filterValue);
     });
   }

@@ -6,7 +6,7 @@ import { Especialista } from '../classes/especialista';
 
 export enum Colecciones {
   // Pacientes = 'pacientes',
-  // Especialistas = 'especialistas',
+  Turnos = 'turnos',
   Personas = 'persona',
   Especialidades = 'especialidades',
   ObrasSociales = 'obrasSociales',

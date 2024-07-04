@@ -1,9 +1,12 @@
+import { inject } from '@angular/core';
 import { Persona } from './persona';
+import { Colecciones, DatabaseService } from '../services/database.service';
 
 export class Especialista extends Persona {
   especialidades: string[];
   autorizado: boolean;
   horarios: string[];
+  turnos: {fecha: string, horario: string}[] = [];
   constructor(
     id: string,
     nombre: string,

@@ -16,10 +16,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormDatosPersonalesComponent } from '../../components/form-datos-personales/form-datos-personales.component';
 import { Persona } from '../../classes/persona';
 import { Paciente } from '../../classes/paciente';
-import {
-  FormDatosEspecificosComponent,
-  especialidad,
-} from '../../components/form-datos-especificos/form-datos-especificos.component';
+import { FormDatosEspecificosComponent } from '../../components/form-datos-especificos/form-datos-especificos.component';
 import { Especialista } from '../../classes/especialista';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { Admin } from '../../classes/admin';
