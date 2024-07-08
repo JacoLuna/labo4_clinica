@@ -2,6 +2,7 @@ import { Persona } from './persona';
 
 export class Paciente extends Persona {
   obraSocial: string;
+  turnos: {fecha: string, horario: string}[] = [];
   
   constructor(
     id: string,

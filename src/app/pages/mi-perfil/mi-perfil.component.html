@@ -99,23 +99,26 @@
           </div>
         </mat-tab>
         <mat-tab label="Mis Horarios" *ngIf="especialista">
-
           <section id="horarios">
-            <div class="label">Horarios</div>
-            <div class="horas-container">
-              @if(!cargando){
-                @for (hs of horarios; track $index) {
-                  @if (!hs.seleccionado) {
-                    <button class="hora" mat-stroked-button (click)="seleccionarHorario($index)">{{hs.horario}}</button>
-                  }@else {
-                    <button class="hora" mat-flat-button color="primary" (click)="seleccionarHorario($index)">{{hs.horario}}</button>  
+            @if (!especialista.autorizado) {
+              <h2>Debe estar autorizado por un admin para administrar sus horarios</h2>
+            }@else {
+              <div class="label">Horarios</div>
+              <div class="horas-container">
+                @if(!cargando){
+                  @for (hs of horarios; track $index) {
+                    @if (!hs.seleccionado) {
+                      <button class="hora" mat-stroked-button (click)="seleccionarHorario($index)">{{hs.horario}}</button>
+                    }@else {
+                      <button class="hora" mat-flat-button color="primary" (click)="seleccionarHorario($index)">{{hs.horario}}</button>  
+                    }
                   }
+                }@else {
+                  <mat-spinner></mat-spinner>
                 }
-              }@else {
-                <mat-spinner></mat-spinner>
-              }
-            </div>
-            <button mat-stroked-button id="btn-actualizar" [disabled]="!cambio" (click)="actualizarHorarios()">Actualizar</button>
+              </div>
+              <button mat-stroked-button id="btn-actualizar" [disabled]="!cambio" (click)="actualizarHorarios()">Actualizar</button>
+            }
           </section>
 
         </mat-tab>

@@ -14,12 +14,12 @@ import { Rutas, StorageService } from '../../services/storage.service';
 import { Colecciones, DatabaseService } from '../../services/database.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormDatosPersonalesComponent } from '../../components/form-datos-personales/form-datos-personales.component';
-import { Persona } from '../../classes/persona';
-import { Paciente } from '../../classes/paciente';
+import { Persona } from '../../classes/personas/persona';
+import { Paciente } from '../../classes/personas/paciente';
 import { FormDatosEspecificosComponent } from '../../components/form-datos-especificos/form-datos-especificos.component';
-import { Especialista } from '../../classes/especialista';
+import { Especialista } from '../../classes/personas/especialista';
 import { SnackBarService } from '../../services/snack-bar.service';
-import { Admin } from '../../classes/admin';
+import { Admin } from '../../classes/personas/admin';
 
 @Component({
   selector: 'app-registro',
@@ -119,14 +119,12 @@ export class RegistroComponent implements OnInit {
         .then(() => {
           switch (categoria) {
             case 'paciente':
-              // this.bd.subirDoc(Colecciones.Pacientes, persona);
               this.snackBar.succesSnackBar(
                 'se creó al paciente con exito!!','Ok',
                 2000
               );
               break;
             case 'especialista':
-              // this.bd.subirDoc(Colecciones.Especialistas, persona);
               this.snackBar.succesSnackBar(
                 'se creó al especialista con exito!!','Ok',
                 2000

@@ -9,7 +9,7 @@ import {
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 import { Colecciones, DatabaseService } from './database.service';
-import { Persona } from '../classes/persona';
+import { Persona } from '../classes/personas/persona';
 import { initializeApp } from 'firebase/app';
 // import { ErrorCodes, Exception } from '../utils/clases/exception';
 

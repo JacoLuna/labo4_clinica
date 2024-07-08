@@ -2,85 +2,96 @@
   <mat-spinner></mat-spinner>
 </div>
 <div class="container">
-      <mat-card appearance="outlined">
-        <mat-card-header>
-          <mat-card-title> Sacar turno</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          
-          <form [formGroup]="frmTurno">
-            <div>
-              @if (frmTurno.controls['especialista'].value) {
-                <!-- <button mat-icon-button (click)="onNoneEspecialidadSelected()">
-                  <mat-icon>remove</mat-icon>
-                </button> -->
-              }
-              <mat-form-field class="full-width">
-                <mat-label>Especialidad</mat-label>
-                <mat-select matNativeControl required formControlName="especialidad" [(ngModel)]="frmTurno.controls['especialidad'].value">
-                  @for (item of filteredEspecialidades; track $index) {
-                    <mat-option [value]="item" (onSelectionChange)="onEspecialidadSelected(item)">{{item.nombre}}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-
-              @if (frmTurno.controls['especialista'].value) {
-                <!-- <button mat-icon-button (click)="onNoneMedicoSelected()">
-                  <mat-icon>remove</mat-icon>
-                </button> -->
-              }
-              <mat-form-field class="full-width">
-                <mat-label>Especialistas</mat-label>
-                <mat-select matNativeControl required formControlName="especialista" [(ngModel)]="frmTurno.controls['especialista'].value">
-                  @for (item of filteredMedicos; track $index) {
-                    <mat-option [value]="item" (onSelectionChange)="onMedicoSelected(item)">{{item.nombre}}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-            </div>
-            
-            <div id="dias" class="selectable-buttons-container">
-              <mat-label>Dias</mat-label>
-              <div class="selectable-buttons">
-
-                  @for (dia of dias; track $index) {
-                    @if (dia.selected) {
-                      <button mat-raised-button class="dia buttons" color="primary" (click)="selectDia($index)">{{dia.dia}}</button>  
-                    }@else {
-                      <button [disabled]="!dia.disponible" mat-stroked-button class="dia buttons" (click)="selectDia($index)">{{dia.dia}}</button>  
-                    }
-                  }
+      <form [formGroup]="frmTurno" (ngSubmit)="sacarTurno()">
+      <mat-stepper [linear]="true" #stepper>
+        <mat-step *ngIf="auth.UsuarioEnSesion?.tipoUsuario == 'admin'" label="Paciente">
+          <div class="frm-content">
+            @for (paciente of pacientes; track $index) {
+              <div class="img-container" 
+              [ngClass]="this.frmTurno.controls['paciente'].value == paciente.id ?'seleccionado':''"
+              (click)="selectPaciente(paciente)">
+                <h2>{{paciente.nombre}}</h2>
+                <img [src]="paciente.fotoUrl" width="200px" [alt]="paciente.apellido">
               </div>
-            </div>
+            }
+          </div>
+          <div class="btn-container first-btn">
+            <button mat-button matStepperNext type="button" [disabled]="!frmTurno.controls['paciente'].value">Siguiente</button>
+          </div>
+        </mat-step>
+        <mat-step label="Especialidades">
+          <div class="frm-content">
+            @for (especialidad of especialidades; track $index) {
+              <div class="img-container" 
+              [ngClass]="this.frmTurno.controls['especialidad'].value == especialidad.nombre ?'seleccionado':''"
+              (click)="selectEspecialidad($event)">
+                <img [src]="especialidad.fotoUrl" 
+                [matTooltip]="especialidad.nombre" width="200px" [alt]="especialidad.nombre">
+              </div>
+            }
+          </div>
+          <div class="btn-container" [ngClass]="auth.UsuarioEnSesion!.tipoUsuario == 'paciente'?'first-btn':''">
+            <button mat-button matStepperPrevious type="button" *ngIf="auth.UsuarioEnSesion!.tipoUsuario != 'paciente'">Volver</button>
+            <button mat-button matStepperNext type="button" [disabled]="!frmTurno.controls['especialidad'].value">Siguiente</button>
+          </div>
+        </mat-step>
+        <mat-step label="Especialistas">
+          <div class="frm-content">
+            @for (medico of filteredMedicos; track $index) {
+              <div class="img-container"
+              [ngClass]="this.frmTurno.controls['especialista'].value == medico.id ?'seleccionado':''"
+              (click)="selectMedico(medico)">
+                <h2>{{medico.nombre}}</h2>
+                <img [src]="medico.fotoUrl" width="200px" [alt]="medico.apellido">
+              </div>
+            }
+          </div>
+          <div class="btn-container">
+            <button mat-button matStepperPrevious type="button">Volver</button>
+            <button mat-button matStepperNext [disabled]="!frmTurno.controls['especialista'].value" type="button">Siguiente</button>
+          </div>
+        </mat-step>
+        <mat-step label="dias y horarios">
             
-            <div id="horarios" class="selectable-buttons-container">
-              <mat-label>Horarios</mat-label>
-              <div class="selectable-buttons">
-                @if (frmTurno.controls['especialista'].value) {
-                  @for (hsMedico of frmTurno.controls['especialista'].value.horarios; track $index) {
-                    @for (hs of horarios; track $index) {
-                      @if (hsMedico == hs.horario) {
-                        @if(hs.seleccionado){
-                          <button class="hora buttons" color="primary" (click)="selectHorario(hs)" mat-raised-button>{{hs.horario}}</button>  
-                        }@else {
-                          <button class="hora buttons" (click)="selectHorario(hs)" mat-stroked-button>{{hs.horario}}</button>  
-                        }
-                      }
-                    }
-                  }
-                }@else {
-                  @for (hs of horarios; track $index) {
-                    <button class="hora buttons" (click)="selectHorario(hs)" mat-stroked-button>{{hs.horario}}</button>  
+          <div id="dias" class="selectable-buttons-container">
+            <mat-label>Dias</mat-label>
+            <div class="selectable-buttons">
+
+                @for (dia of dias; track $index) {
+                  @if (dia.selected) {
+                    <button mat-raised-button class="dia buttons" color="primary" (click)="selectDia(dia)">
+                      {{dia.dia | date:'dd/MM'}}</button>  
+                  }@else {
+                    <button [disabled]="!dia.disponible" mat-stroked-button class="dia buttons" (click)="selectDia(dia)">
+                      {{dia.dia | date:'dd/MM'}}</button>  
                   }
                 }
-              </div>
             </div>
-            
-
-            <div id="boton">
-              <button mat-button [disabled]="frmTurno.invalid" (click)="sacarTurno()">Sacar turno</button>
+          </div>
+          <div id="horarios" class="selectable-buttons-container">
+            <mat-label>Horarios</mat-label>
+            <div class="selectable-buttons">
+              @if (frmTurno.controls['especialista'].value) {
+                @for (hs of horarios; track $index) {
+                  @if(hs.seleccionado){
+                    <button class="hora buttons" color="primary" (click)="selectHorario(hs)" mat-raised-button>
+                      {{hs.horario}}</button>  
+                    }@else {
+                      <button [disabled]="!hs.disponible" class="hora buttons" (click)="selectHorario(hs)" mat-stroked-button>{{hs.horario}}</button>  
+                    }
+                  }
+                  @if (selectedMedico.horarios.length == 0) {
+                    <h2>El especialista seleccionado no tiene horarios disponibles</h2>
+                  }
+                }
             </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
+          </div>
+          <div class="btn-container">
+            <button mat-button matStepperPrevious type="button">Volver</button>
+            <button mat-button matStepperNext type="submit" 
+            [disabled]="!frmTurno.controls['hora'].value && !frmTurno.controls['fecha'].value">Sacar turno</button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </form>
 </div>

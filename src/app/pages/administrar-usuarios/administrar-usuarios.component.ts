@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { Colecciones, DatabaseService } from '../../services/database.service';
-import { Especialista } from '../../classes/especialista';
-import { Paciente } from '../../classes/paciente';
+import { Especialista } from '../../classes/personas/especialista';
+import { Paciente } from '../../classes/personas/paciente';
 import {MatSlideToggleChange, MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { RegistroComponent } from '../registro/registro.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { Admin } from '../../classes/admin';
+import { Admin } from '../../classes/personas/admin';
 
 @Component({
   selector: 'app-administrar-usuarios',

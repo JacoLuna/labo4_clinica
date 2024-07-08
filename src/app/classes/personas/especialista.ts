@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
+import { Colecciones, DatabaseService } from '../../services/database.service';
 import { Persona } from './persona';
-import { Colecciones, DatabaseService } from '../services/database.service';
 
 export class Especialista extends Persona {
   especialidades: string[];

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Firestore, collection, doc, getDocs, setDoc, deleteDoc, updateDoc, onSnapshot, query, QuerySnapshot, orderBy, Query, limit, DocumentSnapshot, getDoc, FieldPath } from '@angular/fire/firestore';
-import { Persona } from '../classes/persona';
-import { Especialista } from '../classes/especialista';
+import { Persona } from '../classes/personas/persona';
+import { Especialista } from '../classes/personas/especialista';
 // import { ErrorCodes, Exception } from '../utils/clases/exception';
 
 export enum Colecciones {
