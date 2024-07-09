@@ -1,4 +1,9 @@
 <div class="container">
+  
+  <div id="spinner" *ngIf="cargando">
+    <mat-spinner></mat-spinner>
+  </div>
+
   <mat-stepper>
     <ng-template matStepperIcon="edit">
       <mat-icon color="accent">key</mat-icon>

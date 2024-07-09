@@ -17,10 +17,18 @@
 
       @if (auth.UsuarioEnSesion!.tipoUsuario != 'especialista') {
         <div>
-          <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()"> Turnos </button>
+          <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()"> Sacar turno </button>
         </div>
       }
-
+      <div>
+        <button mat-stroked-button (click)="manageMisTurnos()"> 
+          @if (auth.UsuarioEnSesion.tipoUsuario == 'admin') {
+            Turnos de<br>la clinica 
+          }@else {
+            Mis turnos
+          }
+        </button>
+      </div>
       <div>
         <button mat-stroked-button routerLinkActive="active" routerLink="/perfil"> Perfil </button>
       </div>

@@ -43,4 +43,7 @@ export class AppComponent implements OnInit{
   manageTurnos(){
     this.router.navigate(['/solicitar-turno']);
   }
+  manageMisTurnos(){
+    this.router.navigate(['/administrar-turno']);  
+  }
 }

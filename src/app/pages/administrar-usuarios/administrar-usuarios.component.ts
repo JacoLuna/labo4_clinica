@@ -16,31 +16,10 @@ import { Admin } from '../../classes/personas/admin';
   styleUrl: './administrar-usuarios.component.scss',
 })
 export class AdministrarUsuariosComponent implements OnInit {
-  displayedColumnsEspecialista: string[] = [
-    'Nombre',
-    'Apellido',
-    'Dni',
-    'Edad',
-    'Correo',
-    'Especialidad',
-    'Autorizado'
-  ]
+  displayedColumnsEspecialista: string[] = [ 'Nombre', 'Apellido', 'Dni', 'Edad', 'Correo', 'Especialidad', 'Autorizado'];
   // 'FotosUrl',
-  displayedColumnsPaciente: string[] = [
-    'Nombre',
-    'Apellido',
-    'Dni',
-    'Edad',
-    'Correo',
-    'Obra social'
-  ]
-  displayedColumnsAdmin: string[] = [
-    'Nombre',
-    'Apellido',
-    'Dni',
-    'Edad',
-    'Correo'
-  ]
+  displayedColumnsPaciente: string[] = ['Nombre','Apellido','Dni','Edad','Correo','Obra social'];
+  displayedColumnsAdmin: string[] = ['Nombre','Apellido','Dni','Edad','Correo'];
 
   ELEMENT_DATA_especialista: Especialista[] = [];
   ELEMENT_DATA_paciente: Paciente[] = [];

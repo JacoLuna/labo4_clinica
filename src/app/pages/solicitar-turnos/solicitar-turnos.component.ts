@@ -7,12 +7,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
-import {MatStepperModule} from '@angular/material/stepper';
+import { MatStepperModule} from '@angular/material/stepper';
 import { Especialista } from '../../classes/personas/especialista';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { Especialidad } from '../../classes/especialidad';
 import { MatCardModule } from '@angular/material/card';
-import { C } from '@angular/cdk/keycodes';
 import { Turnos } from '../../classes/turnos';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SnackBarService } from '../../services/snack-bar.service';
@@ -37,7 +36,7 @@ export class SolicitarTurnosComponent implements OnInit{
   especialidades: Especialidad[] = [];
 
   pacientes: Paciente[] = [];
-  selectePaciente!: Paciente;
+  selectedPaciente!: Paciente;
 
   turnos: Turnos[] = [];
   cargando: boolean = false;
@@ -65,6 +64,8 @@ export class SolicitarTurnosComponent implements OnInit{
     this.especialidades = await this.db.traerColeccion(Colecciones.Especialidades);
     if(this.auth.UsuarioEnSesion?.tipoUsuario == 'admin')
       this.turnos = await this.db.traerColeccion(Colecciones.Turnos);
+    else
+      this.selectedPaciente = <Paciente>this.auth.UsuarioEnSesion;
     this.db.traerColeccion<Persona>(Colecciones.Personas).then( personas => {
       personas.forEach( persona => {
         if(persona.tipoUsuario == 'especialista')
@@ -92,7 +93,7 @@ export class SolicitarTurnosComponent implements OnInit{
 
   selectPaciente(paciente: Paciente){
     this.frmTurno.controls['paciente'].setValue(paciente.id);
-    this.selectePaciente = paciente;
+    this.selectedPaciente = paciente;
   }
   selectMedico(medico: Especialista){
     this.selectedMedico = medico; 
@@ -112,9 +113,22 @@ export class SolicitarTurnosComponent implements OnInit{
     this.dias.forEach( dia => {
       dia.disponible = true;
     });
-    
+    this.dias.forEach( dia => dia.disponible = true);
+
     this.selectedMedico.turnos.forEach( turno => {
-        this.dias.forEach( dia => {
+      this.dias.forEach( dia => {
+        if(this.frmTurno.controls['paciente'].value != ''){
+          this.selectedPaciente.turnos.forEach( turnoPaciente => {
+            if(turnoPaciente.horario == hs.horario && turnoPaciente.fecha == dia.dia ||
+               turno.horario == hs.horario && turno.fecha == dia.dia){
+              dia.disponible = false
+              if(dia.selected){
+                dia.selected = false;
+                this.frmTurno.controls['hora'].setValue('');
+              }
+            }  
+          })
+        }else{
           if(turno.fecha === dia.dia && turno.horario == hs.horario){
             dia.disponible = false
             if(dia.selected){
@@ -122,39 +136,40 @@ export class SolicitarTurnosComponent implements OnInit{
               this.frmTurno.controls['hora'].setValue('');
             }
           }
-        })
+        }
       })
-    
+    })
   }
 
   selectDia(dia:{dia: string, selected: boolean, disponible: boolean}){
-    this.dias.forEach( (dia) => {
-      dia.selected = false; 
-    })
+    this.dias.forEach( dia => dia.selected = false );
     this.dias[this.dias.indexOf(dia)].selected = !this.dias[this.dias.indexOf(dia)].selected;
     this.frmTurno.controls['fecha'].setValue(this.dias[this.dias.indexOf(dia)].dia); 
 
-    this.horarios.forEach( horario => {
-      horario.disponible = true;
-    });
+    this.horarios.forEach( horario => horario.disponible = true );
+
     this.selectedMedico.turnos.forEach( turno => {
       this.horarios.forEach( horario => {
         if(this.frmTurno.controls['paciente'].value != ''){
-          this.selectePaciente.turnos.forEach( turnoPaciente => {
-            if(turnoPaciente.horario == horario.horario || turno.horario == horario.horario && turno.fecha == dia.dia){
+
+          this.selectedPaciente.turnos.forEach( turnoPaciente => {
+            if(turnoPaciente.fecha == dia.dia  && turnoPaciente.horario == horario.horario ||
+               turno.fecha == dia.dia && turno.horario == horario.horario){
               horario.disponible = false
               if(horario.seleccionado){
                 horario.seleccionado = false;
                 this.frmTurno.controls['fecha'].setValue('');
               }
-            }  
+            }
           })
-        }
-        if(turno.horario == horario.horario && turno.fecha == dia.dia){
-          horario.disponible = false
-          if(horario.seleccionado){
-            horario.seleccionado = false;
-            this.frmTurno.controls['fecha'].setValue('');
+
+        }else{
+          if(turno.horario == horario.horario && turno.fecha == dia.dia){
+            horario.disponible = false
+            if(horario.seleccionado){
+              horario.seleccionado = false;
+              this.frmTurno.controls['fecha'].setValue('');
+            }
           }
         }
       })
@@ -170,25 +185,32 @@ export class SolicitarTurnosComponent implements OnInit{
   }
 
   async sacarTurno(){
-    console.log(this.frmTurno)
     if(this.frmTurno.valid){
       this.cargando = true;
       let fecha = this.frmTurno.controls['fecha'].value;
       let horario = this.frmTurno.controls['hora'].value;
       let idPaciente = 
         this.auth.UsuarioEnSesion!.tipoUsuario == 'paciente'? this.auth.UsuarioEnSesion!.id: this.frmTurno.controls['paciente'].value 
+      let paciente =
+        this.auth.UsuarioEnSesion!.tipoUsuario == 'paciente'? 
+        this.auth.UsuarioEnSesion!.nombre + " " + this.auth.UsuarioEnSesion!.apellido: 
+        this.selectedPaciente.nombre + " " + this.selectedPaciente.apellido; 
+      
       let turno: Turnos = new Turnos(
         this.selectedMedico.id,
         idPaciente,
+        this.selectedMedico.nombre + " " + this.selectedMedico.apellido,
+        paciente,
         this.frmTurno.controls['especialidad'].value,
         horario,
         fecha,
       )
+      
       await this.db.subirDoc(Colecciones.Turnos, turno);
       this.selectedMedico.turnos.push({fecha, horario});
-      this.selectePaciente.turnos.push({fecha, horario});
+      this.selectedPaciente.turnos.push({fecha, horario});
       await this.db.actualizarDoc(Colecciones.Personas, this.selectedMedico.id, {turnos: this.selectedMedico.turnos});
-      await this.db.actualizarDoc(Colecciones.Personas, idPaciente, {turnos: this.selectePaciente.turnos});
+      await this.db.actualizarDoc(Colecciones.Personas, idPaciente, {turnos: this.selectedPaciente.turnos});
       
       this.cargando = false;
       this.snackBar.succesSnackBar('Turno hecho ', 'Ok', 2000);

@@ -12,6 +12,7 @@ export enum Rutas {
   Pacientes = 'pacientes',
   Especialistas = 'especialistas',
   Admin = 'admin',
+  Encuestas = 'encuestas',
 }
 @Injectable({
   providedIn: 'root',

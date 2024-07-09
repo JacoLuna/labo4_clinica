@@ -48,5 +48,11 @@ export const routes: Routes = [
       import('./pages/solicitar-turnos/solicitar-turnos.component').then((m) => m.SolicitarTurnosComponent),
       canActivate: [() => redirectUnauthorizedTo(['/home'])],
   },
+  {
+    path: 'administrar-turno',
+    loadComponent: () =>
+      import('./pages/administrar-turnos/administrar-turnos.component').then((m) => m.AdministrarTurnosComponent),
+      canActivate: [() => redirectUnauthorizedTo(['/home'])],
+  },
   { path: '**', component: HomeComponent },
 ];

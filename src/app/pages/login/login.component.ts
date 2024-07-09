@@ -16,19 +16,13 @@ import { Router } from '@angular/router';
 import { DatabaseService } from '../../services/database.service';
 import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatStepperModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatIcon,
-  ],
+  imports: [MatFormFieldModule,MatInputModule,MatButtonModule,MatStepperModule,FormsModule,ReactiveFormsModule,MatIcon,MatProgressSpinnerModule,CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   providers: [
@@ -45,7 +39,7 @@ export class LoginComponent {
   emailErrorMessage = '';
   claveErrorMessage = '';
   hide = true;
-
+  cargando: boolean = true;
   accesosRapido = [{
     img :"https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2Fpacientes%2Favatar-admin1-perez-11111111?alt=media&token=57f39c64-2558-4fb1-92fa-81fc60f0c27a",
     email :'admin1@gmail.com',
@@ -88,6 +82,7 @@ export class LoginComponent {
       correo: this.correo,
       clave: this.clave,
     });
+    this.cargando = false;
   }
   updateErrorMessage(frmControl: FormControl) {
     if (frmControl.hasError('required')) {
@@ -107,11 +102,13 @@ export class LoginComponent {
     event.stopPropagation();
   }
   login() {
+    this.cargando = true;
     this.bd.buscarPersonaPorCorreo(this.correo.value!).then((p) => {
       this.auth
         .ingresarFireAuth(this.correo.value!, this.clave.value!)
         .then(() => {
           this.router.navigate(['/home']);
+          this.cargando = false;
         });
     });
   }

@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100vh;
+  height: 100vh;
+
+  #spinner {
+    position: absolute;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    backdrop-filter: blur(5px);
+  }
+
+  form,
+  .comentario,
+  table {
+    margin: 2rem 0;
+    .input-autocomplete {
+      width: 30vw;
+    }
+  }
+  table {
+    width: 80vw;
+    margin: 0.5rem;
+    .mat-mdc-row .mat-mdc-cell {
+      border-bottom: 1px solid transparent;
+      border-top: 1px solid transparent;
+      cursor: pointer;
+    }
+    .mat-mdc-row:hover .mat-mdc-cell {
+      border-color: currentColor;
+    }
+  }
+  .card {
+    width: 30vw;
+    margin: 0;
+    width: 100%;
+    
+    .buttons{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin: 1.5rem 0;
+    }
+    textarea {
+      height: 7rem;
+    }
+  }
+}
