@@ -1,5 +1,4 @@
 <mat-drawer-container class="container" [hasBackdrop]="true">
-  <!-- autosize -->
   <mat-drawer #drawer class="sidenav" mode="side">
     <div>
       <h2>
@@ -11,24 +10,54 @@
       </h2>
     </div>
     @if (auth.UsuarioEnSesion) {
-      <div>
-        <button mat-stroked-button (click)="logOut()">Salir</button>
-      </div>
+      @switch (auth.UsuarioEnSesion.tipoUsuario) {
 
-      @if (auth.UsuarioEnSesion!.tipoUsuario != 'especialista') {
-        <div>
+        @case ('especialista') {
+          <div>
+            <button mat-stroked-button (click)="manageMisTurnos()"> 
+              Mis turnos
+            </button>
+          </div>
+          <div>
+            <button mat-stroked-button routerLinkActive="active" routerLink="/historia-clinica">
+              Pacientes
+            </button>
+          </div>
+        }
+        @case ('admin') {
+          <div>
+            <button mat-stroked-button routerLinkActive="active" routerLink="/administrar-usuarios">
+              Administrar usuarios
+            </button>
+          </div>
+          <div>
+            <button mat-stroked-button routerLinkActive="active" routerLink="/historia-clinica">
+              Usuarios
+            </button>
+          </div>
+          <div>
+            <button mat-stroked-button (click)="manageMisTurnos()"> 
+             Turnos de<br>la clinica 
+            </button>
+          </div>
+          <div> 
+            <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()"> Sacar turno </button>
+          </div>
+        }
+        @case ('paciente') {
+        <div> 
           <button mat-stroked-button routerLinkActive="active" (click)="manageTurnos()"> Sacar turno </button>
         </div>
+        <div>
+          <button mat-stroked-button (click)="manageMisTurnos()"> 
+           Mis turnos
+          </button>
+        </div>
+        }
       }
       <div>
-        <button mat-stroked-button (click)="manageMisTurnos()"> 
-          @if (auth.UsuarioEnSesion.tipoUsuario == 'admin') {
-            Turnos de<br>la clinica 
-          }@else {
-            Mis turnos
-          }
-        </button>
-      </div>
+        <button mat-stroked-button (click)="logOut()">Salir</button>
+      </div> 
       <div>
         <button mat-stroked-button routerLinkActive="active" routerLink="/perfil"> Perfil </button>
       </div>
@@ -41,13 +70,6 @@
       <div>
         <button mat-stroked-button routerLinkActive="active" routerLink="/login">
           Ingresar
-        </button>
-      </div>
-    }
-    @if (auth.UsuarioEnSesion?.tipoUsuario == 'admin') {
-      <div>
-        <button mat-stroked-button routerLinkActive="active" routerLink="/administrar-usuarios">
-          Administrar usuarios
         </button>
       </div>
     }

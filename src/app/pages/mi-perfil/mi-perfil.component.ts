@@ -10,20 +10,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { Colecciones, DatabaseService } from '../../services/database.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    MatCardModule,
-    MatInput,
-    MatInputModule,
-    MatListModule,
-    MatTabsModule,
-    CommonModule,
-    MatProgressSpinnerModule
-  ],
+  imports: [ MatButtonModule, MatCardModule, MatInput, MatInputModule, MatListModule, MatTabsModule, CommonModule, MatProgressSpinnerModule, HistoriaClinicaComponent],
   templateUrl: './mi-perfil.component.html',
   styleUrl: './mi-perfil.component.scss',
 })

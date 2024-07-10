@@ -5,7 +5,18 @@
   align-items: center;
   height: 100vh;
   width: 100vh;
-
+    
+  #spinner {
+    position: absolute;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    backdrop-filter: blur(5px);
+  }
+  
   mat-tab-group {
     mat-vertical-stepper {
       width: 50rem;

@@ -1,0 +1,60 @@
+<div class="container">
+
+  @if (turno) {
+    <mat-card class="card">
+        <form [formGroup]="frmEncuesta" (ngSubmit)="subirEncuesta()" id="encuesta">
+            <mat-card-header> 
+              Formulario de satisfacción
+            </mat-card-header>
+    
+            <div class="turnoInfo">
+              <mat-form-field>
+                <mat-label> Paciente </mat-label>
+                <input matInput [value]="turno.paciente" disabled="true">
+              </mat-form-field>          
+              <mat-form-field>
+                <mat-label> Especialista </mat-label>
+                <input matInput [value]="turno.especialista" disabled="true">
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label> Especialidad del turno </mat-label>
+                <input matInput [value]="turno.especialidad" disabled="true">
+              </mat-form-field>
+            </div>
+            
+            <div class="slider-container">
+              <mat-slider min="1" max="5" step="1" value="1" showTickMarks discrete="true" class="slider" 
+              [disabled]="turno.comentarioPaciente != ''">
+                <mat-label>Satisfaccion con la clinica</mat-label>
+                <input matSliderThumb formControlName="satisfaccion">
+              </mat-slider>
+            </div>
+                
+            <mat-form-field class="comentario">
+              <textarea matInput #textarea formControlName="comentario" 
+              placeholder="dejanos un comentario sobre la atención" 
+              [readonly]="turno.comentarioPaciente != '' || this.persona.tipoUsuario == 'especialista'"
+              required></textarea>
+              @if (frmEncuesta.controls['comentario'].dirty && frmEncuesta.controls['comentario'].errors) {
+                @if (frmEncuesta.controls['comentario'].errors['minlength']) {
+                  <mat-error>
+                    <span>{{frmEncuesta.controls['comentario'].value.length}}/300</span><br>
+                    <small>la cantidad minima de caracteres es de 20</small>
+                  </mat-error>
+                }
+                @if (frmEncuesta.controls['comentario'].errors['maxlength']) {
+                  <mat-error>
+                    <span>{{frmEncuesta.controls['comentario'].value.length}}/300</span>
+                  </mat-error>
+                }
+              }@else {
+                <span>{{frmEncuesta.controls['comentario'].value.length}}/300</span>
+              }
+            </mat-form-field>
+            <mat-card-actions>
+              <button mat-button type="submit" [disabled]="!frmEncuesta.valid">enviar encuesta</button>
+            </mat-card-actions>
+          </form>
+        </mat-card>
+  }
+</div>

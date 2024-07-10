@@ -20,28 +20,15 @@ import { FormDatosEspecificosComponent } from '../../components/form-datos-espec
 import { Especialista } from '../../classes/personas/especialista';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { Admin } from '../../classes/personas/admin';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { Especialidad } from '../../classes/especialidad';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss',
-  imports: [
-    MatStepperModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIcon,
-    MatCardModule,
-    MatAutocompleteModule,
-    AsyncPipe,
-    MatTabsModule,
-    FormDatosPersonalesComponent,
-    FormDatosEspecificosComponent,
-    CommonModule,
-  ],
+  imports: [ MatStepperModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIcon, MatCardModule, MatAutocompleteModule, AsyncPipe, MatTabsModule, FormDatosPersonalesComponent, FormDatosEspecificosComponent, CommonModule, MatProgressSpinnerModule],
 })
 export class RegistroComponent implements OnInit {
   @Input() admin: boolean = false;
@@ -50,6 +37,7 @@ export class RegistroComponent implements OnInit {
   @ViewChild('stepperAdmin') private stepperAdmin!: MatStepper;
   
   protected duration: string = '1000';
+  cargando = false;
 
   firstLoad = false;
 
@@ -64,16 +52,17 @@ export class RegistroComponent implements OnInit {
 
   constructor(
     public auth: AuthService,
-    private formBuilder: FormBuilder,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
     private storage: StorageService,
-    private bd: DatabaseService,
+    private db: DatabaseService,
     private snackBar: SnackBarService
   ) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
-  registrarPersona(frmDatosEspecificos: FormGroup, categoria: string) {
+  async registrarPersona(frmDatosEspecificos: FormGroup, categoria: string) {
+    this.cargando = true;
+    let especialidades: Especialidad[] = [];
     let persona: Persona;
     if (frmDatosEspecificos.valid) {
       switch (categoria) {
@@ -100,6 +89,15 @@ export class RegistroComponent implements OnInit {
             this.frmDatosPersonales.controls['email'].value,
             frmDatosEspecificos.controls['especialidades'].value
           );
+
+          especialidades = await this.db.traerColeccion(Colecciones.Especialidades);
+
+          (<string[]>frmDatosEspecificos.controls['especialidades'].value).forEach(esp => {
+            if(!especialidades.find(espescialidad => esp == espescialidad.nombre)){
+
+              this.db.subirDoc(Colecciones.Especialidades, new Especialidad(esp));
+            }
+          });
           break;
         case 'admin':
           persona = new Admin(
@@ -113,35 +111,31 @@ export class RegistroComponent implements OnInit {
           );
           break;
       }
-      this.auth
-        .registrarFireAuth(persona!, this.frmDatosPersonales.controls['clave'].value
-        )
-        .then(() => {
-          switch (categoria) {
-            case 'paciente':
-              this.snackBar.succesSnackBar(
-                'se creó al paciente con exito!!','Ok',
-                2000
-              );
-              break;
-            case 'especialista':
-              this.snackBar.succesSnackBar(
-                'se creó al especialista con exito!!','Ok',
-                2000
-              );
-              break;
-            case 'admin':
-              this.snackBar.succesSnackBar(
-                'se creó al admin con exito!!','Ok',
-                2000
-              );
-              break;
-          }
-          if (!this.admin) this.router.navigate(['/home']);
-        })
-        .catch((e) => {
-          this.snackBar.openSnackBar(e, 'Ok');
-        });
+      await this.auth.registrarFireAuth(persona!, this.frmDatosPersonales.controls['clave'].value);
+
+      switch (categoria) {
+        case 'paciente':
+          this.snackBar.succesSnackBar(
+            'se creó al paciente con exito!!','Ok',
+            2000
+          );
+          break;
+        case 'especialista':
+          this.snackBar.succesSnackBar(
+            'se creó al especialista con exito!!','Ok',
+            2000
+          );
+          break;
+        case 'admin':
+          this.snackBar.succesSnackBar(
+            'se creó al admin con exito!!','Ok',
+            2000
+          );
+          break;
+      }
+      this.cargando = false;
+      if (!this.admin) this.router.navigate(['/home']);
+        
     } else {
       this.snackBar.succesSnackBar('hubo un error en algún campo ', 'Ok', 2000);
     }
@@ -183,12 +177,13 @@ export class RegistroComponent implements OnInit {
     }
   }
   handlePic(file: File, tipoFoto: string, categoria: string) {
+    this.cargando = true;
     this.storage
       .subirArchivo(
         file,
         categoria == 'paciente'
           ? Rutas.Pacientes
-          : categoria == 'espcialista'
+          : categoria == 'especialista'
           ? Rutas.Especialistas
           : Rutas.Admin,
         `${tipoFoto}-${this.frmDatosPersonales.controls['nombre'].value}-${this.frmDatosPersonales.controls['apellido'].value}-${this.frmDatosPersonales.controls['DNI'].value}`
@@ -199,6 +194,7 @@ export class RegistroComponent implements OnInit {
         } else {
           this.urlPerfil = r;
         }
+        this.cargando = false;
       });
   }
 }

@@ -117,18 +117,6 @@ export class SolicitarTurnosComponent implements OnInit{
 
     this.selectedMedico.turnos.forEach( turno => {
       this.dias.forEach( dia => {
-        if(this.frmTurno.controls['paciente'].value != ''){
-          this.selectedPaciente.turnos.forEach( turnoPaciente => {
-            if(turnoPaciente.horario == hs.horario && turnoPaciente.fecha == dia.dia ||
-               turno.horario == hs.horario && turno.fecha == dia.dia){
-              dia.disponible = false
-              if(dia.selected){
-                dia.selected = false;
-                this.frmTurno.controls['hora'].setValue('');
-              }
-            }  
-          })
-        }else{
           if(turno.fecha === dia.dia && turno.horario == hs.horario){
             dia.disponible = false
             if(dia.selected){
@@ -136,9 +124,21 @@ export class SolicitarTurnosComponent implements OnInit{
               this.frmTurno.controls['hora'].setValue('');
             }
           }
-        }
       })
     })
+    if(this.frmTurno.controls['paciente'].value != ''){
+      this.dias.forEach( dia => {
+        this.selectedPaciente.turnos.forEach( turnoPaciente => {
+          if(turnoPaciente.horario == hs.horario && turnoPaciente.fecha == dia.dia){
+            dia.disponible = false
+            if(dia.selected){
+              dia.selected = false;
+              this.frmTurno.controls['hora'].setValue('');
+            }
+          }  
+        })
+      })
+    }
   }
 
   selectDia(dia:{dia: string, selected: boolean, disponible: boolean}){
@@ -148,28 +148,27 @@ export class SolicitarTurnosComponent implements OnInit{
 
     this.horarios.forEach( horario => horario.disponible = true );
 
-    this.selectedMedico.turnos.forEach( turno => {
+    if(this.frmTurno.controls['paciente'].value != ''){
       this.horarios.forEach( horario => {
-        if(this.frmTurno.controls['paciente'].value != ''){
-
-          this.selectedPaciente.turnos.forEach( turnoPaciente => {
-            if(turnoPaciente.fecha == dia.dia  && turnoPaciente.horario == horario.horario ||
-               turno.fecha == dia.dia && turno.horario == horario.horario){
-              horario.disponible = false
-              if(horario.seleccionado){
-                horario.seleccionado = false;
-                this.frmTurno.controls['fecha'].setValue('');
-              }
-            }
-          })
-
-        }else{
-          if(turno.horario == horario.horario && turno.fecha == dia.dia){
+        this.selectedPaciente.turnos.forEach( turnoPaciente => {
+          if(turnoPaciente.fecha == dia.dia  && turnoPaciente.horario == horario.horario){
             horario.disponible = false
             if(horario.seleccionado){
               horario.seleccionado = false;
               this.frmTurno.controls['fecha'].setValue('');
             }
+          }
+        })
+      })
+    }
+
+    this.selectedMedico.turnos.forEach( turnoMedico => {
+      this.horarios.forEach( horario => {
+        if(turnoMedico.horario == horario.horario && turnoMedico.fecha == dia.dia){
+          horario.disponible = false
+          if(horario.seleccionado){
+            horario.seleccionado = false;
+            this.frmTurno.controls['fecha'].setValue('');
           }
         }
       })
@@ -214,7 +213,8 @@ export class SolicitarTurnosComponent implements OnInit{
       
       this.cargando = false;
       this.snackBar.succesSnackBar('Turno hecho ', 'Ok', 2000);
-      this.nav.navigate(['/home']);
+      if(this.auth.UsuarioEnSesion!.tipoUsuario != 'admin')
+        this.nav.navigate(['/home']);
     }
   }
 }

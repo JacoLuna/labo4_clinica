@@ -54,5 +54,11 @@ export const routes: Routes = [
       import('./pages/administrar-turnos/administrar-turnos.component').then((m) => m.AdministrarTurnosComponent),
       canActivate: [() => redirectUnauthorizedTo(['/home'])],
   },
+  {
+    path: 'historia-clinica',
+    loadComponent: () =>
+      import('./pages/historia-clinica/historia-clinica.component').then((m) => m.HistoriaClinicaComponent),
+      canActivate: [() => redirectUnauthorizedTo(['/home'])],
+  },
   { path: '**', component: HomeComponent },
 ];

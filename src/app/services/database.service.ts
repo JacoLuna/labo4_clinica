@@ -5,11 +5,12 @@ import { Especialista } from '../classes/personas/especialista';
 // import { ErrorCodes, Exception } from '../utils/clases/exception';
 
 export enum Colecciones {
-  // Pacientes = 'pacientes',
+  Encuestas = 'encuestas',
   Turnos = 'turnos',
   Personas = 'persona',
   Especialidades = 'especialidades',
   ObrasSociales = 'obrasSociales',
+  HistoriaClinica = 'historiaClinica',
 }
 @Injectable({
   providedIn: 'root'

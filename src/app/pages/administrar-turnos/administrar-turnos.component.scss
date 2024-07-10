@@ -1,10 +1,9 @@
 .container {
   display: flex;
-  align-items: center;
   flex-direction: column;
-  width: 100vh;
-  height: 100vh;
-
+  justify-content: center;
+  align-items: center;
+  
   #spinner {
     position: absolute;
     display: flex;
@@ -36,10 +35,16 @@
       border-color: currentColor;
     }
   }
+
+  .turno-seleccionado{
+    width: 80vw;
+  }
   .card {
     width: 30vw;
     margin: 0;
     width: 100%;
+    border: solid 1px black;
+    margin: 1rem;
     
     .buttons{
         display: flex;
@@ -47,8 +52,27 @@
         justify-content: space-evenly;
         margin: 1.5rem 0;
     }
-    textarea {
-      height: 7rem;
+
+    #encuesta, #historiaClinica{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      
+      .turnoInfo, .datosFijos, .datos-dinamicos, .datos-dinamicos-buttones{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        width: 80%;
+        height: 100%;
+      }
+      .comentario{
+        height: 7rem;
+        width: 80%;
+      }
+      .slider-container{
+        margin: auto 0;
+      }
     }
   }
 }

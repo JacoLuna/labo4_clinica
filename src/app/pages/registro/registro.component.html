@@ -1,4 +1,8 @@
 <div class="container">
+  <div id="spinner" *ngIf="cargando">
+    <mat-spinner></mat-spinner>
+  </div>
+  
   <mat-tab-group dynamicHeight selectedIndex="0" [ngClass]="!admin?'noAdmin':''">
     <mat-tab label="Paciente">
       <mat-vertical-stepper 

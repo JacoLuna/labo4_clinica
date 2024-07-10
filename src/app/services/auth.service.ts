@@ -5,7 +5,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
-  updateCurrentUser,
+  sendEmailVerification,
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 import { Colecciones, DatabaseService } from './database.service';
@@ -78,7 +78,10 @@ export class AuthService {
           authDomain: 'lab4lunajaco.firebaseapp.com',
           messagingSenderId: '85267814802',
         },"Secondary"));
-      await createUserWithEmailAndPassword(authInst, usuario.correo, contr);
+      await createUserWithEmailAndPassword(authInst, usuario.correo, contr).then( credentials => {
+        sendEmailVerification(credentials.user);
+      });
+      
 
       const docId = await this.db.subirDoc(Colecciones.Personas, usuario, true);
       usuario.id = docId;

@@ -7,6 +7,17 @@
       [dataSource]="ELEMENT_DATA_especialista"
       class="mat-elevation-z8 demo-table tabla"
     >
+      <ng-container matColumnDef="img">
+        <th mat-header-cell *matHeaderCellDef>foto</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-card>
+            <img
+            mat-card-avatar
+            alt="imagen de avatar"
+            [src]="element.fotoUrl[0]"/>
+          </mat-card>
+        </td>
+      </ng-container>
       <ng-container matColumnDef="Nombre">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
         <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
@@ -38,13 +49,17 @@
           </mat-slide-toggle>
         </td>
       </ng-container>
-      <!-- <ng-container matColumnDef="FotosUrl">
-          <th mat-header-cell *matHeaderCellDef>FotosUrl</th>
-          <td mat-cell *matCellDef="let element">{{ element.fotosUrl }}</td>
-        </ng-container> -->
       <ng-container matColumnDef="Especialidad">
         <th mat-header-cell *matHeaderCellDef>Especialidad</th>
-        <td mat-cell *matCellDef="let element">{{ element.especialidad }}</td>
+        <td mat-cell *matCellDef="let element">
+          @for (especialidad of element.especialidades; track $index) {
+            <ul>
+              <li>
+                {{especialidad}}
+              </li>
+            </ul>
+          }
+        </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumnsEspecialista"></tr>
@@ -62,6 +77,17 @@
       [dataSource]="ELEMENT_DATA_paciente"
       class="mat-elevation-z8 demo-table tabla"
     >
+    <ng-container matColumnDef="img">
+      <th mat-header-cell *matHeaderCellDef>foto</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-card>
+          <img
+          mat-card-avatar
+          alt="imagen de avatar"
+          [src]="element.fotoUrl[0]"/>
+        </mat-card>
+      </td>
+    </ng-container>
       <ng-container matColumnDef="Nombre">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
         <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
@@ -104,6 +130,17 @@
       [dataSource]="ELEMENT_DATA_admin"
       class="mat-elevation-z8 demo-table tabla"
     >
+      <ng-container matColumnDef="img">
+        <th mat-header-cell *matHeaderCellDef>foto</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-card>
+            <img
+            mat-card-avatar
+            alt="imagen de avatar"
+            [src]="element.fotoUrl[0]"/>
+          </mat-card>
+        </td>
+      </ng-container>
       <ng-container matColumnDef="Nombre">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
         <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>

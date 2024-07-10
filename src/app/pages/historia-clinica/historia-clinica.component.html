@@ -1,0 +1,76 @@
+<div class="container">
+    <div id="spinner" *ngIf="cargando">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    @if (auth.UsuarioEnSesion?.tipoUsuario == 'admin') {
+        <button mat-stroked-button (click)="exportToExcel()">descargar excel de usuarios</button>
+    }
+
+    <form>
+        <mat-form-field class="input-autocomplete">
+          <mat-label>filtro</mat-label>
+          <input
+            type="text"
+            placeholder=""
+            aria-label="text"
+            matInput
+            [formControl]="frmFiltro"
+          />
+        </mat-form-field>
+    </form>
+    
+    @if (historiaClinica.length > 0) {
+        @for (item of filteredOptions | async; track $index) {
+        <mat-card class="card">
+            
+            <mat-card-header> 
+                Historia clinica
+            </mat-card-header>
+    
+            <div class="historiaClinica">
+    
+                <div class="datosFijos">
+                    <mat-form-field class="number">
+                    <mat-label> Altura </mat-label>
+                    <input matInput type="number" [value]="item.altura" readonly>
+                    </mat-form-field>          
+                    <mat-form-field class="number">
+                    <mat-label> Peso </mat-label>
+                    <input matInput type="number" [value]="item.peso" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="number">
+                    <mat-label> Temperatura </mat-label>
+                    <input matInput type="number"   [value]="item.temperatura" readonly>
+                    </mat-form-field>
+                    <mat-form-field class="number">
+                    <mat-label> Presión </mat-label>
+                    <input matInput type="number" [value]="item.presion" readonly>
+                    </mat-form-field>
+                </div>
+                
+                <mat-form-field class="comentario">
+                    <mat-label>comentario sobre el turno de {{item.turno.paciente}}</mat-label>
+                    <textarea matInput placeholder="Comentario" [value]="item.comentario" readonly></textarea>
+                </mat-form-field>
+        
+                @for (dato of item.datosAdicionales; track $index) {
+                <div class="datos-dinamicos">
+                    <mat-form-field>
+                    <mat-label> Identificador </mat-label>
+                    <input matInput [value]="dato.clave" readonly>
+                    </mat-form-field>  
+                    <mat-form-field>
+                    <mat-label> Campo </mat-label>
+                    <input matInput [value]="dato.campo" readonly>
+                    </mat-form-field>
+                </div>
+                }
+            </div>
+           
+        </mat-card> 
+        }
+    }@else {
+        <h2>No tiene una historia clinica</h2>   
+    }
+</div>

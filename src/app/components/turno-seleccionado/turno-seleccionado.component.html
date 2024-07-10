@@ -1,0 +1,170 @@
+<div class="container">
+
+    <mat-card class="card" #card *ngIf="turno">
+        
+        @switch(turno.estado){
+            @case ('pendiente') {
+                <div class="buttons">
+                    <button mat-mini-fab color="warn" (click)="accion = 'cancelado' " matTooltip="rechazar turno">
+                    <mat-icon>cancel</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="primary"  *ngIf="usuario.tipoUsuario == 'especialista'" (click)="accion = 'aceptado'" matTooltip="aceptar turno">
+                    <mat-icon>check_circle</mat-icon>
+                    </button>
+                </div>
+            }
+            @case('aceptado'){
+                <div class="buttons">
+                    <button mat-mini-fab color="warn" (click)="accion = 'cancelado'" matTooltip="cancelar turno">
+                    <mat-icon>cancel</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="primary" *ngIf="usuario.tipoUsuario == 'especialista'" (click)="accion = 'finalizado'" matTooltip="finalizar turno">
+                        <mat-icon>verified</mat-icon>
+                    </button>
+                </div>
+            }
+            @case('cancelado'){
+                @if (turno.comentarioPaciente != '') {
+                <mat-card-header> 
+                    {{turno.paciente}} canceló por lo siguiente 
+                </mat-card-header>
+                <mat-form-field class="comentario">
+                    <mat-label>Comentario de {{turno.paciente}}</mat-label>
+                    <textarea matInput placeholder="Dejanos un comentario" [(ngModel)]="turno.comentarioPaciente" disabled="true">
+                    </textarea>
+                </mat-form-field>
+                }@else {
+                    <mat-card-header> 
+                        {{turno.especialista}} canceló por lo siguiente 
+                    </mat-card-header>
+                    <mat-form-field class="comentario">
+                        <mat-label>Comentario a {{turno.paciente}}</mat-label>
+                        <textarea matInput placeholder="Dejanos un comentario" [(ngModel)]="turno.comentarioEspecialista" disabled="true"></textarea>
+                    </mat-form-field>
+                }
+            }
+            @case('rechazado'){
+                @if (turno.comentarioPaciente != '') {
+                <mat-card-header> 
+                    {{turno.paciente}} canceló por lo siguiente 
+                </mat-card-header>
+                <mat-form-field class="comentario">
+                    <mat-label>Comentario de {{turno.paciente}}</mat-label>
+                    <textarea matInput placeholder="Dejanos un comentario" [(ngModel)]="turno.comentarioPaciente" disabled="true">
+                    </textarea>
+                </mat-form-field>
+                }@else {
+                    <mat-card-header> 
+                        {{turno.especialista}} canceló por lo siguiente 
+                    </mat-card-header>
+                    <mat-form-field class="comentario">
+                        <mat-label>Comentario a {{turno.paciente}}</mat-label>
+                        <textarea matInput placeholder="Dejanos un comentario" [(ngModel)]="turno.comentarioEspecialista" disabled="true"></textarea>
+                    </mat-form-field>
+                }
+            }
+            @case('finalizado'){
+                <mat-card-header> 
+                    comentario del especialista 
+                </mat-card-header>
+                <mat-form-field class="comentario">
+                    <mat-label>Comentario</mat-label>
+                    <textarea matInput placeholder="Dejanos un comentario" [(ngModel)]="turno.comentarioEspecialista" disabled="true">
+                    </textarea>
+                </mat-form-field>
+            }
+        }
+        @if(accionesEstado['cancelado'] || accionesEstado['rechazado']){
+            <mat-card-header> Por que desea cancelar el turno? </mat-card-header>    
+            <mat-form-field class="comentario">
+                <mat-label>Debe dejarle un comentario a {{turno!.especialista}}</mat-label>
+                <textarea matInput placeholder="Que paso....?" [(ngModel)]="comentario"></textarea>
+            </mat-form-field>
+            <mat-card-actions>
+                @if(accionesEstado['cancelado']){
+                    <button mat-stroked-button (click)="actualizarTurno('cancelado',comentario)" [disabled]="comentario == ''">Cancelar turno</button>    
+                }
+                @if (accionesEstado['rechazado']) {
+                    <button mat-stroked-button (click)="actualizarTurno('rechazado',comentario)" [disabled]="comentario == ''">Cancelar turno</button>
+                }
+            </mat-card-actions>
+        }
+        
+        @if(accionesEstado['finalizado']){
+            <form [formGroup]="frmHistoriaClinica" id="historiaClinica" preventDefault>
+                <mat-card-header> 
+                    Historia clinica
+                </mat-card-header>
+
+                <div class="datosFijos">
+                    <mat-form-field class="number">
+                    <mat-label> Altura en m</mat-label>
+                    <input matInput type="number" formControlName="altura" 
+                    [value]="frmHistoriaClinica.controls['altura'].value" required>
+                    </mat-form-field>          
+                    <mat-form-field class="number">
+                    <mat-label> Peso en Kg</mat-label>
+                    <input matInput type="number" formControlName="peso" required>
+                    </mat-form-field>
+                    <mat-form-field class="number">
+                    <mat-label> Temperatura en °C</mat-label>
+                    <input matInput type="number"  formControlName="temperatura" required>
+                    </mat-form-field>
+                    <mat-form-field class="number">
+                    <mat-label> Presión en mm</mat-label>
+                    <input matInput type="number" formControlName="presion" required>
+                    </mat-form-field>
+                </div>
+                
+                <mat-form-field class="comentario">
+                    <mat-label>comentario sobre el turno de {{turno.paciente}}</mat-label>
+                    <textarea matInput placeholder="Dejanos un comentario" formControlName="comentario" required></textarea>
+                    @if (frmHistoriaClinica.controls['comentario'].dirty && frmHistoriaClinica.controls['comentario'].errors) {
+                    @if (frmHistoriaClinica.controls['comentario'].errors['minlength']) {
+                        <mat-error>
+                        <span>{{frmHistoriaClinica.controls['comentario'].value.length}}/300</span><br>
+                        <small>la cantidad minima de caracteres es de 20</small>
+                        </mat-error>
+                    }
+                    @if (frmHistoriaClinica.controls['comentario'].errors['maxlength']) {
+                        <mat-error>
+                        <span>{{frmHistoriaClinica.controls['comentario'].value.length}}/300</span>
+                        </mat-error>
+                    }
+                    }@else {
+                    <span>{{frmHistoriaClinica.controls['comentario'].value.length}}/300</span>
+                    }
+                </mat-form-field>
+
+                @for (dato of datosDinamicos; track $index) {
+                    @if (dato.disponible) {
+                    <div class="datos-dinamicos" [formGroup]="dato.frm!">
+                        <mat-form-field>
+                        <mat-label> Identificador </mat-label>
+                        <input matInput formControlName = 'clave' required>
+                        </mat-form-field>  
+                        <mat-form-field>
+                        <mat-label> Campo </mat-label>
+                        <input matInput formControlName = 'campo' required>
+                        </mat-form-field>
+                    </div>
+                    }
+                }
+                <div class="datos-dinamicos-buttones">
+                    <button mat-mini-fab type="button" color="primary" (click)="delDato()">
+                    <mat-icon class="add-course-btn">remove</mat-icon>
+                    </button>
+                    <button mat-mini-fab type="button" color="primary" (click)="addDato()">
+                    <mat-icon class="add-course-btn">add</mat-icon>
+                    </button>
+                </div>
+                    
+                <mat-card-actions>
+                    <button mat-stroked-button 
+                    (click)="subirHistoriaClinica()"
+                    [disabled]="frmHistoriaClinica.invalid">enviar</button>
+                </mat-card-actions>
+            </form>
+        }
+    </mat-card>
+</div>
