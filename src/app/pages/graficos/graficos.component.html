@@ -76,13 +76,14 @@
         </div>
     </div>
     
-    <div class="tabla">
-        @if(logs && !cargando){
-            <h2 appResaltar appCursiva>Logs <button mat-button (click)="exportar()">Exportar a excel</button> </h2>
+    @if(logs && !cargando){
+    <div class="tabla-container">
+        <div class="tabla">
+            <h2 appResaltar appCursiva>Logs </h2>
             <table
                 mat-table
                 [dataSource]="logs"
-                class="mat-elevation-z8 demo-table tabla"
+                class="mat-elevation-z8 demo-table mat-table"
             >
                 <ng-container matColumnDef="usuario">
                 <th mat-header-cell *matHeaderCellDef>usuario</th>
@@ -96,10 +97,14 @@
                 <th mat-header-cell *matHeaderCellDef>horario</th>
                 <td mat-cell *matCellDef="let element">{{ element.fecha | date :'mediumTime' }}</td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="columnsLog"></tr>
+                <tr mat-header-row *matHeaderRowDef="columnsLog; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: columnsLog" appCursiva appBold></tr>
             </table>
-        }
+        </div>
+        <div>
+            <button mat-button (click)="exportar()">Exportar a excel</button>
+        </div>
     </div>
+    }
     
 </div>
