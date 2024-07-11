@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from './services/auth.service';
+import { DiasPipe } from './pipes/dias.pipe';
 
 @Component({
   selector: 'app-root',
@@ -27,13 +28,15 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit{
   showFiller = false;
-  
+  dia:string = '';
+  currDate: Date = new Date();
+  diasPipe = new DiasPipe();
   constructor(private router: Router, public auth: AuthService) {
     const ssUser = sessionStorage.getItem('usuario');
     this.auth.UsuarioEnSesion = ssUser ? JSON.parse(ssUser) : null;
   }
   ngOnInit(): void {
-    // this.router.navigate(['/home']);
+    this.dia = this.diasPipe.transform(this.currDate.getDay().toString());
   }
 
   logOut() {

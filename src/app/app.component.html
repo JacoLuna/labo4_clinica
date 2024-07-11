@@ -2,6 +2,7 @@
   <mat-drawer #drawer class="sidenav" mode="side">
     <div>
       <h2>
+        {{dia}}<br>
         @if (auth.UsuarioEnSesion) {
           {{auth.UsuarioEnSesion.tipoUsuario}}
         }@else {
