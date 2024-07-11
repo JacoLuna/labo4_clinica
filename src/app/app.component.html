@@ -2,11 +2,9 @@
   <mat-drawer #drawer class="sidenav" mode="side">
     <div>
       <h2>
-        {{dia}}<br>
+        {{dia}} {{nroDia}} de {{mes}}<br>
         @if (auth.UsuarioEnSesion) {
-          {{auth.UsuarioEnSesion.tipoUsuario}}
-        }@else {
-          Inivitado
+          Hola {{auth.UsuarioEnSesion.nombre}}
         }
       </h2>
     </div>
