@@ -5,8 +5,15 @@
   align-items: center;
 
   #tablas{
-    .tabla{
-      margin: 3rem 0;
+    
+  .table-container{
+    height: 40vh;
+    overflow: auto;
+    overflow-x: hidden;
+    margin: 3rem 0;
+      .tabla{
+        height: 100%;
+      }
     }
   }
 }

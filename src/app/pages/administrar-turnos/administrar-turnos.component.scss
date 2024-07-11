@@ -23,19 +23,24 @@
       width: 30vw;
     }
   }
-  table {
-    width: 80vw;
-    margin: 0.5rem;
-    .mat-mdc-row .mat-mdc-cell {
-      border-bottom: 1px solid transparent;
-      border-top: 1px solid transparent;
-      cursor: pointer;
-    }
-    .mat-mdc-row:hover .mat-mdc-cell {
-      background-color: #ECECEC;
-    }
-    .selected{
-      background-color: #ECECEC;
+  .table-container{
+    height: 60vh;
+    overflow: auto;
+    overflow-x: hidden;
+    table {
+      width: 80vw;
+      margin: 0.5rem;
+      .mat-mdc-row .mat-mdc-cell {
+        border-bottom: 1px solid transparent;
+        border-top: 1px solid transparent;
+        cursor: pointer;
+      }
+      .mat-mdc-row:hover .mat-mdc-cell {
+        background-color: #ECECEC;
+      }
+      .selected{
+        background-color: #ECECEC;
+      }
     }
   }
   .turno-seleccionado{
