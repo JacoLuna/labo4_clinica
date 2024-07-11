@@ -3,10 +3,10 @@
       <mat-spinner></mat-spinner>
     </div>
     
+    @if (auth.UsuarioEnSesion?.tipoUsuario == 'admin') {
     <div class="sticky-header">
-      @if (auth.UsuarioEnSesion?.tipoUsuario == 'admin') {
           <button mat-stroked-button (click)="exportToExcel()">descargar excel de usuarios</button>
-      }
+     
       <form>
           <mat-form-field class="input-autocomplete">
             <mat-label>filtro</mat-label>
@@ -20,6 +20,7 @@
           </mat-form-field>
       </form>
     </div>
+    }
     <div class="historias-clinicas-container">
         @if (historiaClinica.length > 0) {
             @for (item of filteredOptions | async; track $index) {
@@ -111,6 +112,7 @@
               </mat-card> 
             </div>
             }
+            <button *ngIf="persona.tipoUsuario == 'paciente'" mat-button (click)="descargarPDF()">Descargar pdf</button>
         }@else {
             <h2>No tiene una historia clinica</h2>   
         }

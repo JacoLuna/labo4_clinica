@@ -49,7 +49,6 @@
       <tr mat-header-row *matHeaderRowDef="columnsTurnoPendientes ; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: columnsTurnoPendientes" 
       (click)="rowClicked(row)" [ngClass]="row.id == turno?.id?'selected':''" appCursiva appBold></tr>
-      <!--   -->
     </table>
   </div>
   

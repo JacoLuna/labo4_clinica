@@ -3,7 +3,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
+    max-height: 80vh;
+    overflow: auto;
     #spinner {
       position: absolute;
       display: flex;
@@ -44,6 +45,7 @@
       justify-content: space-evenly;
       justify-self: center;
       flex-wrap: wrap;
+      padding-top: 40rem;
       .card {
           width: 30vw;
           margin: .5rem;

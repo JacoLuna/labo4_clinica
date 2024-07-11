@@ -122,8 +122,10 @@
           </section>
 
         </mat-tab>
-        <mat-tab label="Mi historia clinica" *ngIf="paciente">
-          <app-historia-clinica></app-historia-clinica>
+        <mat-tab  label="Mi historia clinica" *ngIf="paciente">
+          <div class="app-historia-clinicalabel">
+            <app-historia-clinica></app-historia-clinica>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </mat-card-content>

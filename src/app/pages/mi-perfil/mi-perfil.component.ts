@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { Colecciones, DatabaseService } from '../../services/database.service';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { HistoriaClinicaComponent } from '../historia-clinica/historia-clinica.component';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -56,7 +58,6 @@ export class MiPerfilComponent {
     switch (auth.UsuarioEnSesion?.tipoUsuario) {
       case 'especialista':
         this.especialista = <Especialista>auth.UsuarioEnSesion;
-        console.log(this.especialista.especialidades)
         if(this.especialista.horarios.length > 0){
           this.especialista.horarios.forEach( hsEsp => {
             this.horarios.forEach( hs => {
@@ -95,4 +96,5 @@ export class MiPerfilComponent {
       this.especialista = <Especialista>this.auth.UsuarioEnSesion;
     });
   }
+
 }

@@ -20,6 +20,8 @@ import { VerReseniaComponent } from '../../components/ver-resenia/ver-resenia.co
 import { TurnoSeleccionadoComponent } from '../../components/turno-seleccionado/turno-seleccionado.component';
 import { Turnos } from '../../classes/turnos';
 import { MatTableModule } from '@angular/material/table';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-historia-clinica',
@@ -88,4 +90,84 @@ export class HistoriaClinicaComponent implements OnInit{
   exportToExcel(): void {
     this.excelService.generateExcel(this.personas, 'usuarios');
   }
+
+  
+  descargarPDF() {
+    const doc = new jsPDF();
+
+    // Encabezado del documento
+    doc.text('Informe de Historial Clínica', 10, 10);
+    doc.text(`Fecha de emisión: ${new Date().toLocaleDateString()}`, 10, 30);
+    doc.addImage('assets/Logo.png', 'PNG', 150, 10, 30, 30);
+
+    const tableColumn = ['Especialidad', 'Especialista', 'Fecha', 'Hora', 'Altura', 'Peso', 'Temperatura', 'Presión', 'Comentario', 'Datos 1', 'Datos 2', 'Datos 3'];
+    const tableRows: any = [];
+    let clave1 = '';
+    let clave2 = '';
+    let clave3 = '';
+    let campo1 = '';
+    let campo2 = '';
+    let campo3 = '';
+
+    this.historiaClinica.forEach(historiaClinica => {
+    
+      historiaClinica.datosAdicionales.forEach( (datoAdicional, index) => {
+        switch(index){
+          case 1:
+            clave1 = datoAdicional.clave;
+            campo1 = datoAdicional.campo;
+            break;
+          case 2:
+            clave2 = datoAdicional.clave;
+            campo2 = datoAdicional.campo;
+            break;
+          case 3:
+            clave3 = datoAdicional.clave;
+            campo3 = datoAdicional.campo;
+            break;
+        }
+      })
+      
+      
+      const turnoData = [
+        historiaClinica.turno.especialidad,
+        historiaClinica.turno.especialista,
+        historiaClinica.turno.horario,,
+        historiaClinica.altura || '',
+        historiaClinica.peso || '',
+        historiaClinica.temperatura || '',
+        historiaClinica.presion || '',
+        historiaClinica.comentario || '',
+        `${clave1}:${campo1}` || '',
+        `${clave2}:${campo2}` || '',
+        `${clave3}:${campo3}` || '',
+      ];
+      tableRows.push(turnoData);
+    })
+
+    // Crear la tabla
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 50,
+      styles: {
+        fillColor: [255, 255, 255], // Color de fondo de las celdas
+        textColor: [0, 0, 0], // Color del texto
+        fontSize: 10,
+      },
+      headStyles: {
+        fillColor: [22, 160, 133], // Color de fondo de la cabecera
+        textColor: [255, 255, 255], // Color del texto de la cabecera
+        fontSize: 12,
+        fontStyle: 'bold'
+      },
+      alternateRowStyles: {
+        fillColor: [240, 240, 240], // Color de fondo de las filas alternas
+      },
+    });
+
+    // Guardar el PDF
+    doc.save(`Historial_Clinico_${this.persona.nombre}_${this.persona.apellido}.pdf`);
+  }
+
 }

@@ -25,6 +25,7 @@ import { VerReseniaComponent } from '../../components/ver-resenia/ver-resenia.co
 import { EncuestaPaciente } from '../../classes/encuesta-paciente';
 import { BoldDirective } from '../../directives/bold.directive';
 import { CursivaDirective } from '../../directives/cursiva.directive';
+import { HistoriaClinica } from '../../classes/historia-clinica';
 
 
 @Component({
@@ -84,24 +85,26 @@ export class AdministrarTurnosComponent implements OnInit {
 
   private _filter(value: string) {
     const filterValue = value.toLowerCase();
-    
+
     switch(this.persona.tipoUsuario){
       case 'admin':
         return this.turnos.
         filter(option => 
-          option.especialidad.toLowerCase().includes(filterValue) || option.especialista.toLowerCase().includes(filterValue));
+          option.especialidad.toLowerCase().includes(filterValue) || 
+          option.especialista.toLowerCase().includes(filterValue));
       case 'paciente':
         return this.turnos.
         filter(option => 
-          option.especialidad.toLowerCase().includes(filterValue) || option.especialista.toLowerCase().includes(filterValue));
+          option.especialidad.toLowerCase().includes(filterValue) || 
+          option.especialista.toLowerCase().includes(filterValue));
       case 'especialista':
         return this.turnos.
         filter(option => 
-          option.especialidad.toLowerCase().includes(filterValue) || option.paciente.toLowerCase().includes(filterValue));
+          option.especialidad.toLowerCase().includes(filterValue) || 
+          option.paciente.toLowerCase().includes(filterValue));
     }
 
   }
-
   async rowClicked(turno : Turnos){
     this.encuesta = undefined;
     this.turno = turno;
