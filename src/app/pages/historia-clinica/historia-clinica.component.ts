@@ -16,11 +16,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { ExcelService } from '../../services/excel.service';
+import { VerReseniaComponent } from '../../components/ver-resenia/ver-resenia.component';
+import { TurnoSeleccionadoComponent } from '../../components/turno-seleccionado/turno-seleccionado.component';
+import { Turnos } from '../../classes/turnos';
+import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-historia-clinica',
   standalone: true,
-  imports: [MatProgressSpinnerModule, CommonModule, FormsModule, ReactiveFormsModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule],
+  imports: [MatProgressSpinnerModule, CommonModule, FormsModule, ReactiveFormsModule, MatAutocompleteModule, MatFormFieldModule, MatInputModule, MatCardModule, MatButtonModule, VerReseniaComponent, TurnoSeleccionadoComponent, MatTableModule],
   templateUrl: './historia-clinica.component.html',
   styleUrl: './historia-clinica.component.scss'
 })
@@ -29,15 +33,18 @@ export class HistoriaClinicaComponent implements OnInit{
   persona!: Persona;
   personas: Persona[] = [];
   historiaClinica: HistoriaClinica[] = [];
+  // turnos: Turnos[] = [];
   frmFiltro = new FormControl('');
   filteredOptions!: Observable<HistoriaClinica[]>;
 
+  columnsTurno: string[] = [ 'especialidad', 'fecha', 'horario', 'medico', 'paciente', 'estado']; 
+  
   constructor(protected auth: AuthService, protected db: DatabaseService, private excelService: ExcelService){
     this.cargando = true;
-    
   }
   async ngOnInit(): Promise<void> {
     this.historiaClinica = await this.db.traerColeccion(Colecciones.HistoriaClinica);
+    // this.turnos = await this.db.traerColeccion(Colecciones.Turnos);
     switch(this.auth.UsuarioEnSesion?.tipoUsuario){
       case 'admin':
         this.personas = await this.db.traerColeccion(Colecciones.Personas);
@@ -65,6 +72,7 @@ export class HistoriaClinicaComponent implements OnInit{
     return this.historiaClinica.
     filter(option => 
       option.turno.especialista.toLowerCase().includes(filterValue) || 
+      option.turno.paciente.toLowerCase().includes(filterValue) || 
       option.comentario.toLowerCase().includes(filterValue) ||  
       option.datosAdicionales.forEach( e => e.campo.toLowerCase().includes(filterValue)) ||
       option.datosAdicionales.forEach( e => e.clave.toLowerCase().includes(filterValue)) ||

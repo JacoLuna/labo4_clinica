@@ -22,9 +22,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class TurnoSeleccionadoComponent {
 
-  @Input() turno: Turnos | undefined;
+  _turno: Turnos | undefined;
+  @Input() set turno(value: Turnos) {
+    this._turno = value;
+    this.accionesEstado['aceptado'] = false;
+    this.accionesEstado['rechazado'] = false;
+    this.accionesEstado['cancelado'] = false;
+    this.accionesEstado['finalizado'] = false;
+  }
   @Input() usuario!: Persona;
-  @Output() onTurnoActualizado = new EventEmitter<boolean>();;
+  @Output() onTurnoActualizado = new EventEmitter<boolean>();
   cargando:boolean=false;
   comentario: string = '';
   accionesEstado : {[key:string]:boolean} = {  
@@ -39,10 +46,10 @@ export class TurnoSeleccionadoComponent {
   datosDinamicos: {frm: FormGroup | undefined ,disponible: boolean}[] = []
 
   public set accion(accion: estado){
-    this.accionesEstado['aceptar'] = false;
-    this.accionesEstado['rechazar'] = false;
-    this.accionesEstado['cancelar'] = false;
-    this.accionesEstado['finalizar'] = false;
+    this.accionesEstado['aceptado'] = false;
+    this.accionesEstado['rechazado'] = false;
+    this.accionesEstado['cancelado'] = false;
+    this.accionesEstado['finalizado'] = false;
     this.accionesEstado[accion] = true;
 
     if(accion == 'aceptado'){
@@ -70,23 +77,24 @@ export class TurnoSeleccionadoComponent {
 
   async actualizarTurno(estado: estado, comentario?: string){
     this.cargando = true;
-    if(comentario != '' && this.turno){
-      if(this.usuario.tipoUsuario == 'especialista')
-        await this.db.actualizarDoc(Colecciones.Turnos, this.turno.id, {comentarioEspecialista: comentario});
-      else{
-        await this.db.actualizarDoc(Colecciones.Turnos, this.turno.id, {comentarioPaciente: comentario});
+    if(this._turno){
+      if(comentario){
+        if(this.usuario.tipoUsuario == 'especialista')
+          await this.db.actualizarDoc(Colecciones.Turnos, this._turno.id, {comentarioEspecialista: comentario});
+        else{
+          await this.db.actualizarDoc(Colecciones.Turnos, this._turno.id, {comentarioPaciente: comentario});
+        }
       }
-      await this.db.actualizarDoc(Colecciones.Turnos, this.turno.id, {estado: estado});
+      await this.db.actualizarDoc(Colecciones.Turnos, this._turno.id, {estado: estado});
     }
     this.onTurnoActualizado.emit(true);
-    this.turno = undefined;
+    this._turno = undefined;
     this.accionesEstado[this.accion] = false;
     this.cargando = false;
   }
 
   async subirHistoriaClinica(){
     this.cargando = true;
-    
     let historiaCLinica: HistoriaClinica;
     let altura = this.frmHistoriaClinica.controls['altura'].value;
     let peso = this.frmHistoriaClinica.controls['peso'].value;
@@ -102,10 +110,11 @@ export class TurnoSeleccionadoComponent {
       }
       else
         this.frmHistoriaClinica.removeControl(`datosDinamico${index}`);
-    })
-    historiaCLinica = new HistoriaClinica(altura ,peso ,temperatura ,presion ,comentario, this.turno!, datosAdicionales);
-    await this.db.subirDoc(Colecciones.HistoriaClinica, historiaCLinica);
+    });
     this.actualizarTurno('finalizado',comentario);
+    historiaCLinica = new HistoriaClinica(altura ,peso ,temperatura ,presion ,comentario, this._turno!, datosAdicionales);
+    await this.db.subirDoc(Colecciones.HistoriaClinica, historiaCLinica);
+    console.log(historiaCLinica);
     this.cargando = false;
   }
 

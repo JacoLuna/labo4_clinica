@@ -17,33 +17,59 @@
     button, form{
       margin: 1.5rem 0;
     }
+    table {
+      box-shadow: none;
+      border-bottom: solid 1px black;
+      border-top: solid 1px black;
+    }
     .input-autocomplete{
       width: 30vw;
     }
-    .card {
-        width: 30vw;
-        margin: 0;
-        width: 100%;
-        border: solid 1px black;
-        margin: 1rem;
-    
-        .historiaClinica{
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          
-          .turnoInfo, .datosFijos, .datos-dinamicos, .datos-dinamicos-buttones{
+    .historias-clinicas-container{
+      // display: flex;
+      // align-items: center;
+      // justify-content: space-evenly;
+      // border: solid 1px red;
+      // max-width: 200vh;
+
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+      justify-self: center;
+      flex-wrap: wrap;
+      .card {
+          width: 30vw;
+          margin: 0;
+          width: 100%;
+          margin: 1rem;
+          height: 600px;
+          textarea{
+            resize: none;
+          }
+          .historiaClinica{
             display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-            width: 80%;
-            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            .turnoInfo, .datosFijos, .datos-dinamicos, .datos-dinamicos-buttones{
+              display: flex;
+              flex-direction: row;
+              justify-content: space-evenly;
+              height: 100%;
+              width: 100%;
+            }
+            .datosFijos{
+              margin-top: 1rem;
+              .number{
+                width: 20%;
+              }
+            }
+            .comentario{
+              height: 7rem;
+              width: 80%;
+            }
           }
-          .comentario{
-            height: 7rem;
-            width: 80%;
-          }
-        }
       }
+    }
 }  

@@ -19,58 +19,99 @@
           />
         </mat-form-field>
     </form>
+    <div class="historias-clinicas-container">
+        @if (historiaClinica.length > 0) {
+            @for (item of filteredOptions | async; track $index) {
     
-    @if (historiaClinica.length > 0) {
-        @for (item of filteredOptions | async; track $index) {
-        <mat-card class="card">
-            
-            <mat-card-header> 
-                Historia clinica
-            </mat-card-header>
-    
-            <div class="historiaClinica">
-    
-                <div class="datosFijos">
-                    <mat-form-field class="number">
-                    <mat-label> Altura </mat-label>
-                    <input matInput type="number" [value]="item.altura" readonly>
-                    </mat-form-field>          
-                    <mat-form-field class="number">
-                    <mat-label> Peso </mat-label>
-                    <input matInput type="number" [value]="item.peso" readonly>
-                    </mat-form-field>
-                    <mat-form-field class="number">
-                    <mat-label> Temperatura </mat-label>
-                    <input matInput type="number"   [value]="item.temperatura" readonly>
-                    </mat-form-field>
-                    <mat-form-field class="number">
-                    <mat-label> Presión </mat-label>
-                    <input matInput type="number" [value]="item.presion" readonly>
-                    </mat-form-field>
-                </div>
-                
-                <mat-form-field class="comentario">
-                    <mat-label>comentario sobre el turno de {{item.turno.paciente}}</mat-label>
-                    <textarea matInput placeholder="Comentario" [value]="item.comentario" readonly></textarea>
-                </mat-form-field>
-        
-                @for (dato of item.datosAdicionales; track $index) {
-                <div class="datos-dinamicos">
-                    <mat-form-field>
-                    <mat-label> Identificador </mat-label>
-                    <input matInput [value]="dato.clave" readonly>
-                    </mat-form-field>  
-                    <mat-form-field>
-                    <mat-label> Campo </mat-label>
-                    <input matInput [value]="dato.campo" readonly>
-                    </mat-form-field>
-                </div>
-                }
+            <!-- <div class="turno-seleccionado"> -->
+                <!-- <app-turno-seleccionado [turno]="item.turno" [usuario]="persona" ></app-turno-seleccionado> -->
+                <!-- <app-ver-resenia [persona]="persona" [turnoInput]="item.turno"></app-ver-resenia> -->
+            <!-- </div> -->
+            <div>
+              <mat-card class="card">
+                  <mat-card-header> 
+                      <h2>
+                          Historia clinica de {{item.turno.paciente}}
+                      </h2>
+                  </mat-card-header>
+      
+                  <table 
+                  mat-table 
+                  class="mat-elevation-z8 demo-table tabla" 
+                  [dataSource]="[item]">
+                    <ng-container matColumnDef="especialidad">
+                      <th mat-header-cell *matHeaderCellDef>especialidad</th>
+                      <td mat-cell *matCellDef="let element">{{ item.turno.especialidad }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fecha">
+                      <th mat-header-cell *matHeaderCellDef>fecha</th>
+                      <td mat-cell *matCellDef="let element">{{ item.turno.fecha | date }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="horario">
+                      <th mat-header-cell *matHeaderCellDef>horario</th>
+                      <td mat-cell *matCellDef="let element">{{ item.turno.horario }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="medico">
+                      <th mat-header-cell *matHeaderCellDef>medico</th>
+                      <td mat-cell *matCellDef="let element">{{ item.turno.especialista }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="paciente">
+                      <th mat-header-cell *matHeaderCellDef>paciente</th>
+                      <td mat-cell *matCellDef="let element">{{ item.turno.paciente }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="estado">
+                      <th mat-header-cell *matHeaderCellDef>estado</th>
+                      <td mat-cell *matCellDef="let element">{{ item.turno.estado }}</td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="columnsTurno"></tr>
+                    <tr mat-row *matRowDef="let row; columns: columnsTurno"></tr>
+                  </table>
+      
+                  <div class="historiaClinica">
+          
+                      <div class="datosFijos">
+                          <mat-form-field class="number">
+                          <mat-label> Altura </mat-label>
+                          <input matInput type="number" [value]="item.altura" readonly>
+                          </mat-form-field>          
+                          <mat-form-field class="number">
+                          <mat-label> Peso </mat-label>
+                          <input matInput type="number" [value]="item.peso" readonly>
+                          </mat-form-field>
+                          <mat-form-field class="number">
+                          <mat-label> Temperatura </mat-label>
+                          <input matInput type="number"   [value]="item.temperatura" readonly>
+                          </mat-form-field>
+                          <mat-form-field class="number">
+                          <mat-label> Presión </mat-label>
+                          <input matInput type="number" [value]="item.presion" readonly>
+                          </mat-form-field>
+                      </div>
+                      
+                      <mat-form-field class="comentario">
+                          <mat-label>comentario sobre el turno de {{item.turno.paciente}}</mat-label>
+                          <textarea matInput placeholder="Comentario" [value]="item.comentario" readonly></textarea>
+                      </mat-form-field>
+              
+                      @for (dato of item.datosAdicionales; track $index) {
+                      <div class="datos-dinamicos">
+                          <mat-form-field class="identificador">
+                          <mat-label> Identificador </mat-label>
+                          <input matInput [value]="dato.clave" readonly>
+                          </mat-form-field>  
+                          <mat-form-field class="campo">
+                          <mat-label> Campo </mat-label>
+                          <input matInput [value]="dato.campo" readonly>
+                          </mat-form-field>
+                      </div>
+                      }
+                  </div>
+                  
+              </mat-card> 
             </div>
-           
-        </mat-card> 
+            }
+        }@else {
+            <h2>No tiene una historia clinica</h2>   
         }
-    }@else {
-        <h2>No tiene una historia clinica</h2>   
-    }
+    </div>
 </div>

@@ -1,39 +1,45 @@
 <div class="container">
-
-  @if (turno) {
+  <div id="spinner" *ngIf="cargando">
+    <mat-spinner></mat-spinner>
+  </div>
+  @if (turnoInput && persona.tipoUsuario != 'admin') {
     <mat-card class="card">
         <form [formGroup]="frmEncuesta" (ngSubmit)="subirEncuesta()" id="encuesta">
             <mat-card-header> 
-              Formulario de satisfacción
+              <h2>
+                Formulario de satisfacción
+              </h2>
             </mat-card-header>
-    
+            
             <div class="turnoInfo">
               <mat-form-field>
                 <mat-label> Paciente </mat-label>
-                <input matInput [value]="turno.paciente" disabled="true">
+                <input matInput [value]="turnoInput.paciente" readonly>
               </mat-form-field>          
               <mat-form-field>
                 <mat-label> Especialista </mat-label>
-                <input matInput [value]="turno.especialista" disabled="true">
+                <input matInput [value]="turnoInput.especialista" readonly>
               </mat-form-field>
               <mat-form-field>
-                <mat-label> Especialidad del turno </mat-label>
-                <input matInput [value]="turno.especialidad" disabled="true">
+                <mat-label> Especialidad del turnoInput </mat-label>
+                <input matInput [value]="turnoInput.especialidad" readonly>
               </mat-form-field>
             </div>
             
             <div class="slider-container">
               <mat-slider min="1" max="5" step="1" value="1" showTickMarks discrete="true" class="slider" 
-              [disabled]="turno.comentarioPaciente != ''">
+              [disabled]="_encuestaInput != undefined">
                 <mat-label>Satisfaccion con la clinica</mat-label>
-                <input matSliderThumb formControlName="satisfaccion">
+                <input matSliderThumb formControlName="satisfaccion" >
               </mat-slider>
             </div>
                 
             <mat-form-field class="comentario">
+              <mat-label>Comentario de {{turnoInput.paciente}}</mat-label>
               <textarea matInput #textarea formControlName="comentario" 
               placeholder="dejanos un comentario sobre la atención" 
-              [readonly]="turno.comentarioPaciente != '' || this.persona.tipoUsuario == 'especialista'"
+              [readonly]="_encuestaInput != undefined ||this.persona.tipoUsuario == 'especialista'"
+              [ngClass]="_encuestaInput != undefined?'non-resizable':''"
               required></textarea>
               @if (frmEncuesta.controls['comentario'].dirty && frmEncuesta.controls['comentario'].errors) {
                 @if (frmEncuesta.controls['comentario'].errors['minlength']) {
@@ -51,10 +57,10 @@
                 <span>{{frmEncuesta.controls['comentario'].value.length}}/300</span>
               }
             </mat-form-field>
-            <mat-card-actions>
+            <mat-card-actions *ngIf="_encuestaInput == undefined">
               <button mat-button type="submit" [disabled]="!frmEncuesta.valid">enviar encuesta</button>
             </mat-card-actions>
-          </form>
-        </mat-card>
+        </form>
+    </mat-card>
   }
 </div>

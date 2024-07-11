@@ -21,11 +21,13 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { COMMA, ENTER} from '@angular/cdk/keycodes';
 import { Especialidad } from '../../classes/especialidad';
 import { ObraSocial } from '../../classes/obraSocial';
+import { RecaptchaModule } from 'ng-recaptcha';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-form-datos-especificos',
   standalone: true,
-  imports: [ MatStepperModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIcon, MatCardModule, MatAutocompleteModule, AsyncPipe, FormDatosPersonalesComponent, MatTabsModule, MatTooltipModule, MatChipsModule],
+  imports: [ MatStepperModule, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIcon, MatCardModule, MatAutocompleteModule, AsyncPipe, FormDatosPersonalesComponent, MatTabsModule, MatTooltipModule, MatChipsModule, RecaptchaModule],
   templateUrl: './form-datos-especificos.component.html',
   styleUrl: './form-datos-especificos.component.scss',
 })
@@ -53,6 +55,8 @@ export class FormDatosEspecificosComponent {
   picPerfilCanceled: boolean = false;
   picAvatarCanceled: boolean = false;
   
+  recaptcha: boolean = false;
+
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   readonly currentEspecialidad = model('');
   readonly especialidades = signal<string[]>([]);
@@ -178,18 +182,11 @@ export class FormDatosEspecificosComponent {
     this.onPreviousEvent.emit();
   }
 
-  // addEspecialidad() {
-  //   this.addEsp = !this.addEsp;
-  //   this.frmDatosEspecificosEspecialista.controls['especialidad'].setValue('');
-  // }
-
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim().split(' ')[0];
-    // Add our fruit
     if (value) {
       this.especialidades.update(especialidades => [...especialidades, value]);
     }
-    // Clear the input value
     this.currentEspecialidad.set('');
   }
 
@@ -208,8 +205,10 @@ export class FormDatosEspecificosComponent {
   selected(event: MatAutocompleteSelectedEvent): void {
     this.especialidades.update(especialidades => [...especialidades, event.option.viewValue]);
     this.currentEspecialidad.set('');
-    // event.option.deselect();
     this.frmDatosEspecificosEspecialista.controls['especialidades'].setValue(this.especialidades());
   }
 
+  resolved(captchaResponse: string | null) {
+    this.recaptcha = true;
+  }
 }

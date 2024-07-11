@@ -1,0 +1,50 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100vw;
+    height: 100%;
+
+    #spinner {
+      position: absolute;
+      display: flex;
+      height: 100vh;
+      width: 100vw;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      backdrop-filter: blur(5px);
+    }
+    .chart-container{
+        border: solid 1px black;
+        padding: .5rem;
+        height: 50%;
+    }
+    .graficos{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 50%;
+        
+        .grupo-grafico{
+            width: 50%;
+            margin: 0 .5rem;
+
+            .chart-container{
+                margin: 1rem;
+                // height: 435px;
+
+                form{
+                    width: 100%;
+                    .slider-container{
+                        .slider{
+                            width: 50%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

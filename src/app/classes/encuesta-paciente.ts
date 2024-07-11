@@ -1,6 +1,6 @@
 import { Turnos } from "./turnos";
 
-export class EncuestaCliente {
+export class EncuestaPaciente {
     id: string = '';
     turno: Turnos;
     paciente: string;

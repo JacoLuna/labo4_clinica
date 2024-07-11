@@ -82,7 +82,7 @@
       matStepperNext
       color="accent"
       (click)="siguiente()"
-      [disabled]="frmDatosEspecificosPaciente.invalid"
+      [disabled]="frmDatosEspecificosPaciente.invalid || !recaptcha"
     >
       Terminar
     </button>
@@ -216,3 +216,7 @@
     </div>
   </form>
 }
+<div class="re-captcha">
+  <re-captcha (resolved)="resolved($event)" siteKey="6LeWWg0qAAAAANA_aCFb2Yj_C25FE5V5YO63Ab0b"></re-captcha>
+</div>
+

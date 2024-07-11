@@ -19,31 +19,29 @@
       width: 30vw;
       margin: 0;
       width: 100%;
-      border: solid 1px black;
       margin: 1rem;
       
-      .buttons{
-          display: flex;
-          flex-direction: row;
-          justify-content: space-evenly;
-          margin: 1.5rem 0;
+      .non-resizable{
+        resize: none;
       }
-  
       #encuesta{
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         
-        .turnoInfo, .datosFijos{
+        .turnoInfo{
           display: flex;
           flex-direction: row;
           justify-content: space-evenly;
           width: 80%;
           height: 100%;
         }
+        .comentario{
+          width: 80%;
+        }
         .slider-container{
-          margin: auto 0;
+          margin: 1.5rem;
         }
       }
     }

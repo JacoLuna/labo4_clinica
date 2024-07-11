@@ -11,6 +11,7 @@ export enum Colecciones {
   Especialidades = 'especialidades',
   ObrasSociales = 'obrasSociales',
   HistoriaClinica = 'historiaClinica',
+  Log = 'log',
 }
 @Injectable({
   providedIn: 'root'

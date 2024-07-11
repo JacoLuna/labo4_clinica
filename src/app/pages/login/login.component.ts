@@ -13,11 +13,12 @@ import { AuthService } from '../../services/auth.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { DatabaseService } from '../../services/database.service';
+import { Colecciones, DatabaseService } from '../../services/database.service';
 import { MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { Log } from '../../classes/log';
 
 @Component({
   selector: 'app-login',
@@ -102,11 +103,15 @@ export class LoginComponent {
     event.stopPropagation();
   }
   login() {
+    let log: Log;
     this.cargando = true;
     this.bd.buscarPersonaPorCorreo(this.correo.value!).then((p) => {
       this.auth
         .ingresarFireAuth(this.correo.value!, this.clave.value!)
-        .then(() => {
+        .then(async () => {
+          log = new Log(this.auth.UsuarioEnSesion!.id,`${this.auth.UsuarioEnSesion?.nombre} ${this.auth.UsuarioEnSesion!.apellido}`,
+            new Date().toString());
+          await this.bd.subirDoc(Colecciones.Log, log);
           this.router.navigate(['/home']);
           this.cargando = false;
         });

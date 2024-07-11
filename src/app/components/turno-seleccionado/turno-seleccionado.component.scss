@@ -25,7 +25,6 @@
       width: 30vw;
       margin: 0;
       width: 100%;
-      border: solid 1px black;
       margin: 1rem;
       
       .buttons{
@@ -35,6 +34,10 @@
           margin: 1.5rem 0;
       }
   
+      .non-resizable{
+        resize: none;
+      }
+
       #encuesta, #historiaClinica{
         display: flex;
         flex-direction: column;
@@ -52,6 +55,7 @@
           height: 7rem;
           width: 80%;
         }
+        
         .slider-container{
           margin: auto 0;
         }

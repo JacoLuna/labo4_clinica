@@ -1,0 +1,105 @@
+<div class="container">
+    <div id="spinner" *ngIf="cargando">
+        <mat-spinner></mat-spinner>
+    </div>
+    
+    <div class="graficos">
+        <div class="grupo-grafico">
+            
+            <div class="chart-container">
+            <mat-radio-group aria-label="Select an option" (change)="changeGrafico(0)" [(ngModel)]="especialidadTipo">
+                <mat-radio-button value="doughnut">Dona</mat-radio-button>
+                <mat-radio-button value="line">Linea</mat-radio-button>
+                <mat-radio-button value="pie">Pie</mat-radio-button>
+                <mat-radio-button value="bar" checked >Barras</mat-radio-button>
+            </mat-radio-group>
+                <canvas id="especialidadChart">{{ charts[0] }}</canvas>
+                <button mat-button (click)="exportar(0)">Exportar a excel</button>
+            </div>
+            
+            <div class="chart-container">
+            <mat-radio-group aria-label="Select an option" (change)="changeGrafico(1)" [(ngModel)]="diaTipo">
+                <mat-radio-button value="doughnut" >Dona</mat-radio-button>
+                <mat-radio-button value="line" >Linea</mat-radio-button>
+                <mat-radio-button value="pie" >Pie</mat-radio-button>
+                <mat-radio-button value="bar" >Barras</mat-radio-button>
+            </mat-radio-group>
+                <canvas id="diaChart">{{ charts[1] }}</canvas>
+                <button mat-button (click)="exportar(1)">Exportar a excel</button>
+            </div>   
+        </div>
+        
+        <div class="grupo-grafico">
+            <div class="chart-container">
+            <mat-radio-group aria-label="Select an option" (change)="changeGrafico(2)" [(ngModel)]="turnosSolicitadosTipo">
+                <mat-radio-button value="doughnut" >Dona</mat-radio-button>
+                <mat-radio-button value="line" >Linea</mat-radio-button>
+                <mat-radio-button value="pie" >Pie</mat-radio-button>
+                <mat-radio-button value="bar" >Barras</mat-radio-button>
+            </mat-radio-group>
+            <form [formGroup]="frmFechaPendiente" *ngIf="!cargando">
+                <mat-label>Fecha</mat-label>  
+                <div class="slider-container">
+                    <mat-slider [min]="minDate" [max]="maxDate" step="86400" showTickMarks discrete="true" class="slider" 
+                    [displayWith]="formatLabel">
+                        <input matSliderStartThumb formControlName="limiteInferior">
+                        <input matSliderEndThumb formControlName="limiteSuperior">
+                    </mat-slider>
+                    <button mat-stroked-button (click)="turnosSolicitadosChart(turnosSolicitadosTipo)">aplicar cambios</button>
+                </div>
+            </form>
+            <canvas id="turnosSolicitadosChart">{{ charts[2] }}</canvas>
+            <button mat-button (click)="exportar(2)">Exportar a excel</button>
+            </div>  
+            
+            <div class="chart-container">
+            <mat-radio-group aria-label="Select an option" (change)="changeGrafico(3)" [(ngModel)]="turnosFinalizadosTipo">
+                <mat-radio-button value="doughnut" >Dona</mat-radio-button>
+                <mat-radio-button value="line" >Linea</mat-radio-button>
+                <mat-radio-button value="pie" >Pie</mat-radio-button>
+                <mat-radio-button value="bar" >Barras</mat-radio-button>
+            </mat-radio-group>
+            <form [formGroup]="frmFechaFinalizado" *ngIf="!cargando">
+                <mat-label>Fecha</mat-label>  
+                <div class="slider-container">
+                    <mat-slider [min]="minDate" [max]="maxDate" step="86400" showTickMarks discrete="true" class="slider" 
+                    [displayWith]="formatLabel">
+                        <input matSliderStartThumb formControlName="limiteInferior">
+                        <input matSliderEndThumb formControlName="limiteSuperior">
+                    </mat-slider>
+                    <button mat-stroked-button (click)="turnosFinalizadosChart(turnosFinalizadosTipo)">aplicar cambios</button>
+                </div>
+            </form>
+            <canvas id="turnosFinalizadosChart">{{ charts[3] }}</canvas>
+            <button mat-button (click)="exportar(3)">Exportar a excel</button>
+            </div> 
+        </div>
+    </div>
+    
+    <div class="tabla">
+        @if(logs && !cargando){
+            <h2 appResaltar appCursiva>Logs <button mat-button (click)="exportar()">Exportar a excel</button> </h2>
+            <table
+                mat-table
+                [dataSource]="logs"
+                class="mat-elevation-z8 demo-table tabla"
+            >
+                <ng-container matColumnDef="usuario">
+                <th mat-header-cell *matHeaderCellDef>usuario</th>
+                <td mat-cell *matCellDef="let element">{{ element.usuario }}</td>
+                </ng-container>
+                <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef>fecha</th>
+                <td mat-cell *matCellDef="let element">{{ element.fecha | date }}</td>
+                </ng-container>
+                <ng-container matColumnDef="horario">
+                <th mat-header-cell *matHeaderCellDef>horario</th>
+                <td mat-cell *matCellDef="let element">{{ element.fecha | date :'mediumTime' }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="columnsLog"></tr>
+                <tr mat-row *matRowDef="let row; columns: columnsLog" appCursiva appBold></tr>
+            </table>
+        }
+    </div>
+    
+</div>

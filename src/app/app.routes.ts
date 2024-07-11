@@ -60,5 +60,11 @@ export const routes: Routes = [
       import('./pages/historia-clinica/historia-clinica.component').then((m) => m.HistoriaClinicaComponent),
       canActivate: [() => redirectUnauthorizedTo(['/home'])],
   },
+  {
+    path: 'graficos',
+    loadComponent: () =>
+      import('./pages/graficos/graficos.component').then((m) => m.GraficosComponent),
+      canActivate: [() => redirectUnauthorizedTo(['/home'])],
+  },
   { path: '**', component: HomeComponent },
 ];
