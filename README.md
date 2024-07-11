@@ -1,27 +1,18 @@
-# Clinicaonline
+# Clinica Online
+![](https://firebasestorage.googleapis.com/v0/b/lab4lunajaco.appspot.com/o/imagenes%2FLogo.png?alt=media&token=5b9f7fd8-038f-421b-8b29-3e40f9e31b69)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.5.
 
-## Development server
+# Sobre nosotros 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+En ClínicaSalud Online, estamos dedicados a brindarte la mejor atención médica desde la comodidad de tu hogar. Nuestra plataforma digital está diseñada para ofrecer consultas médicas seguras, eficientes y personalizadas, accesibles desde cualquier lugar y en cualquier momento.
 
-## Code scaffolding
+¿Quiénes Somos?
+Somos un equipo de profesionales de la salud comprometidos con tu bienestar. Contamos con médicos especialistas en diversas áreas, desde medicina general hasta especialistas en campos específicos como cardiología, dermatología, pediatría y más. Todos nuestros profesionales están altamente calificados y certificados para ofrecerte la mejor atención posible.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Como empezar
+- 1 Regístrate: Crea tu cuenta en nuestra plataforma.
+- 2 Elige tu Médico: Selecciona el especialista que necesitas y programa tu cita.
+- 3 Espere a que el medico confirme el turno.
+- 4 Dejanos una reseña de como fue la atencion
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+En ClínicaSalud Online, tu salud es nuestra prioridad. Estamos aquí para acompañarte y brindarte el cuidado que mereces, sin importar dónde estés. ¡Comienza hoy mismo y experimenta una nueva forma de cuidar tu salud!
