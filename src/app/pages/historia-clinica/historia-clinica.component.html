@@ -2,23 +2,24 @@
     <div id="spinner" *ngIf="cargando">
       <mat-spinner></mat-spinner>
     </div>
-
-    @if (auth.UsuarioEnSesion?.tipoUsuario == 'admin') {
-        <button mat-stroked-button (click)="exportToExcel()">descargar excel de usuarios</button>
-    }
-
-    <form>
-        <mat-form-field class="input-autocomplete">
-          <mat-label>filtro</mat-label>
-          <input
-            type="text"
-            placeholder=""
-            aria-label="text"
-            matInput
-            [formControl]="frmFiltro"
-          />
-        </mat-form-field>
-    </form>
+    
+    <div class="sticky-header">
+      @if (auth.UsuarioEnSesion?.tipoUsuario == 'admin') {
+          <button mat-stroked-button (click)="exportToExcel()">descargar excel de usuarios</button>
+      }
+      <form>
+          <mat-form-field class="input-autocomplete">
+            <mat-label>filtro</mat-label>
+            <input
+              type="text"
+              placeholder=""
+              aria-label="text"
+              matInput
+              [formControl]="frmFiltro"
+            />
+          </mat-form-field>
+      </form>
+    </div>
     <div class="historias-clinicas-container">
         @if (historiaClinica.length > 0) {
             @for (item of filteredOptions | async; track $index) {
