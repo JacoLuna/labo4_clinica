@@ -5,15 +5,28 @@
   align-items: center;
 
   #tablas{
-    
   .table-container{
-    height: 40vh;
+    max-height: 40vh;
     overflow: auto;
     overflow-x: hidden;
     margin: 3rem 0;
       .tabla{
         height: 100%;
       }
+    }
+  }
+
+  #especialidades{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: 60vh;
+    overflow: auto;
+    margin: 3rem;
+
+    mat-card-actions{
+      display: flex;
+      justify-content: center;
     }
   }
 }

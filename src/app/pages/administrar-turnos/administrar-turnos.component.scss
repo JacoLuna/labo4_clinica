@@ -24,7 +24,7 @@
     }
   }
   .table-container{
-    height: 60vh;
+    max-height: 60vh;
     overflow: auto;
     overflow-x: hidden;
     table {

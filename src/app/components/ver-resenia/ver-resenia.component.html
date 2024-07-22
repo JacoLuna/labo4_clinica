@@ -28,9 +28,9 @@
             
             <div class="slider-container">
               <mat-slider min="1" max="5" step="1" value="1" showTickMarks discrete="true" class="slider" 
-              [disabled]="_encuestaInput != undefined">
+              [disabled]="_encuestaInput != undefined || this.persona.tipoUsuario == 'especialista'">
                 <mat-label>Satisfaccion con la clinica</mat-label>
-                <input matSliderThumb formControlName="satisfaccion" >
+                <input matSliderThumb formControlName="satisfaccion">
               </mat-slider>
             </div>
                 
@@ -38,7 +38,7 @@
               <mat-label>Comentario de {{turnoInput.paciente}}</mat-label>
               <textarea matInput #textarea formControlName="comentario" 
               placeholder="dejanos un comentario sobre la atención" 
-              [readonly]="_encuestaInput != undefined ||this.persona.tipoUsuario == 'especialista'"
+              [readonly]="_encuestaInput != undefined || this.persona.tipoUsuario == 'especialista'"
               [ngClass]="_encuestaInput != undefined?'non-resizable':''"
               required></textarea>
               @if (frmEncuesta.controls['comentario'].dirty && frmEncuesta.controls['comentario'].errors) {
@@ -57,7 +57,7 @@
                 <span>{{frmEncuesta.controls['comentario'].value.length}}/300</span>
               }
             </mat-form-field>
-            <mat-card-actions *ngIf="_encuestaInput == undefined">
+            <mat-card-actions *ngIf="_encuestaInput == undefined && this.persona.tipoUsuario != 'especialista'">
               <button mat-button type="submit" [disabled]="!frmEncuesta.valid">enviar encuesta</button>
             </mat-card-actions>
         </form>

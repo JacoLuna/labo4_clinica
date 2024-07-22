@@ -1,4 +1,5 @@
 <div id="content">
+  
   <div id="tablas">
     @if (ELEMENT_DATA_especialista.length > 0) {
     <h2>Especialistas</h2>
@@ -173,5 +174,43 @@
   </div>
   <div id="app-registro-container">
     <app-registro [admin]="true"></app-registro>
+  </div>
+
+  <div id="especialidades">
+    <div id="spinner" *ngIf="cargando">
+      <mat-spinner></mat-spinner>
+    </div>
+
+    @for (especialidad of especialidades; track $index) {
+      <mat-card *ngIf="!cargando">
+        <mat-card-header>
+          <h2>{{especialidad.nombre}}</h2>
+        </mat-card-header>
+        <mat-card-content>
+          <img [src]="especialidad.fotoUrl">
+        </mat-card-content>
+        <mat-card-footer>
+          <mat-card-actions>
+            <button
+            type="button"
+            mat-raised-button
+            class="btnPic"
+            (click)="perfilInput.click()"
+          >
+            Cambiar Foto
+          </button>
+          <input
+            id="inputPerfilPic"
+            hidden
+            (change)="cambiarFoto($event, especialidad)"
+            #perfilInput
+            type="file"
+            formControlName="fotoPerfil"
+            accept="image/png,image/PNG,image/jpg,image/jpeg"
+          />
+          </mat-card-actions>
+        </mat-card-footer>
+      </mat-card>
+    }
   </div>
 </div>
